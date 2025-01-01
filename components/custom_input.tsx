@@ -8,7 +8,6 @@ interface CustomInputProps {
   animationDelay: number;
   placeholder: string;
   secureTextEntry?: boolean;
-  onValidate?: (value: string | number) => void;
 }
 
 export default function CustomInput({
@@ -17,7 +16,6 @@ export default function CustomInput({
   animationDelay,
   placeholder,
   secureTextEntry = false,
-  onValidate,
 }: CustomInputProps): React.JSX.Element {
   return (
     <Animated.View

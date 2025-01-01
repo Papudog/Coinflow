@@ -1,11 +1,19 @@
 import { useNavigation } from "expo-router";
 import { useEffect, useState } from "react";
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import {
+  Pressable,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import { FontAwesome } from "@expo/vector-icons";
 import Animated, { FadeInDown, FadeInLeft } from "react-native-reanimated";
 import { theme } from "@/constants/theme";
 import Logo from "@/components/svgs/logo";
 import CustomInput from "@/components/custom_input";
+import useEmail from "@/hooks/useEmail";
+import usePassword from "@/hooks/usePassword";
 
 export default function Login(): React.JSX.Element {
   const navigation = useNavigation();
@@ -14,8 +22,16 @@ export default function Login(): React.JSX.Element {
     navigation.setOptions({ headerShown: false });
   }, [navigation]);
 
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail, isEmailValid] = useEmail();
+  const [password, setPassword, isPasswordValid] = usePassword();
+
+  const [isFormValid, setIsFormValid] = useState(false);
+
+  useEffect((): void => {
+    isEmailValid && isPasswordValid
+      ? setIsFormValid(true)
+      : setIsFormValid(false);
+  }, [isEmailValid, isPasswordValid]);
 
   return (
     <View style={styles.container}>
@@ -51,10 +67,16 @@ export default function Login(): React.JSX.Element {
           entering={FadeInDown.delay(600).duration(1000).springify()}
           style={styles.buttonContainer}
         >
-          <TouchableOpacity style={styles.touchableButton}>
+          <Pressable
+            style={styles.touchableButton}
+            disabled={!isFormValid}
+            onPress={(): void => {
+              console.log(email, password);
+            }}
+          >
             <Text style={{ color: theme.light }}>Log in</Text>
             <FontAwesome name="arrow-right" size={16} color={theme.light} />
-          </TouchableOpacity>
+          </Pressable>
         </Animated.View>
 
         <Animated.View
