@@ -1,135 +1,97 @@
 import { useNavigation } from "expo-router";
-import { useEffect } from "react";
-import {
-  StyleSheet,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { useEffect, useState } from "react";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { FontAwesome } from "@expo/vector-icons";
-import * as yup from "yup";
-import { Formik, FormikProps } from "formik";
-import Animated, { FadeIn, FadeInDown, FadeOut } from "react-native-reanimated";
+import Animated, { FadeInDown, FadeInLeft } from "react-native-reanimated";
 import { theme } from "@/constants/theme";
-import Logo from "@/shared/components/svgs/logo";
+import Logo from "@/components/svgs/logo";
+import CustomInput from "@/components/custom_input";
 
-interface FormValues {
-  email: string;
-  password: string;
-}
-
-export default function Login() {
+export default function Login(): React.JSX.Element {
   const navigation = useNavigation();
-  const loginSchema = yup.object().shape({
-    email: yup
-      .string()
-      .email("Enter a valid email")
-      .required("Email is required"),
-    password: yup
-      .string()
-      .min(8, (min): string => `Password must be at least ${min} characters`)
-      .required("Password is required"),
-  });
 
   useEffect((): void => {
     navigation.setOptions({ headerShown: false });
   }, [navigation]);
 
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
   return (
     <View style={styles.container}>
-      <View>
+      <View style={styles.containerWrapper}>
         <Logo />
-      </View>
 
-      <View style={styles.content_wrapper}>
+        <CustomInput
+          value={email}
+          setValue={setEmail}
+          animationDelay={200}
+          placeholder="Email"
+        />
+        <CustomInput
+          value={password}
+          setValue={setPassword}
+          animationDelay={400}
+          placeholder="Password"
+          secureTextEntry={true}
+        />
+
         <Animated.View
-          entering={FadeInDown.delay(200).duration(1000).springify()}
-          style={styles.viewContainer}
-        >
-          <TextInput
-            placeholder="Email"
-            placeholderTextColor={theme.light}
-            style={styles.input}
-          />
-        </Animated.View>
-
-        <Animated.View
-          entering={FadeInDown.delay(400).duration(2000).springify()}
-          style={styles.viewContainer}
-        >
-          <TextInput
-            placeholder="Password"
-            placeholderTextColor={theme.light}
-            secureTextEntry
-          />
-        </Animated.View>
-
-        <View
-          style={{ width: "100%", alignItems: "flex-end", marginVertical: 10 }}
+          entering={FadeInDown.delay(400).duration(1000).springify()}
+          style={styles.loginOptions}
         >
           <TouchableOpacity>
             <Text style={{ color: theme.tertiary, fontSize: 12 }}>
               Forgot password?
             </Text>
           </TouchableOpacity>
-        </View>
+        </Animated.View>
 
-        <View style={styles.buttonContainer}>
-          <TouchableOpacity
-            style={{
-              flexDirection: "row",
-              justifyContent: "space-between",
-              width: "100%",
-              alignItems: "center",
-            }}
-          >
+        <Animated.View
+          entering={FadeInDown.delay(600).duration(1000).springify()}
+          style={styles.buttonContainer}
+        >
+          <TouchableOpacity style={styles.touchableButton}>
             <Text style={{ color: theme.light }}>Log in</Text>
             <FontAwesome name="arrow-right" size={16} color={theme.light} />
           </TouchableOpacity>
-        </View>
-      </View>
+        </Animated.View>
 
-      <View
-        style={{
-          flexDirection: "row",
-          alignItems: "center",
-          paddingHorizontal: 40,
-        }}
-      >
-        <View style={{ flex: 1, height: 1, backgroundColor: theme.tertiary }} />
-        <View>
-          <Text
-            style={{ width: 50, textAlign: "center", color: theme.tertiary }}
-          >
-            Or
+        <Animated.View
+          entering={FadeInLeft.delay(800).duration(1000).springify()}
+          style={styles.divider}
+        >
+          <View style={styles.lines} />
+          <View>
+            <Text
+              style={{ width: 50, textAlign: "center", color: theme.tertiary }}
+            >
+              Or
+            </Text>
+          </View>
+          <View style={styles.lines} />
+        </Animated.View>
+
+        <Animated.View
+          entering={FadeInLeft.delay(800).duration(1000).springify()}
+          style={styles.loginMethods}
+        >
+          <TouchableOpacity>
+            <FontAwesome name="google" size={16} color={theme.tertiary} />
+          </TouchableOpacity>
+        </Animated.View>
+
+        <Animated.View
+          entering={FadeInLeft.delay(1000).duration(1000).springify()}
+          style={{ position: "absolute", bottom: 60, flexDirection: "row" }}
+        >
+          <Text style={{ color: theme.light, fontSize: 12 }}>
+            Don't have an account?{" "}
           </Text>
-        </View>
-        <View style={{ flex: 1, height: 1, backgroundColor: theme.tertiary }} />
-      </View>
-
-      <View
-        style={{
-          flexDirection: "row",
-          marginVertical: 20,
-          borderColor: theme.tertiary,
-          borderWidth: 2,
-          padding: 12,
-          borderRadius: 50,
-        }}
-      >
-        <TouchableOpacity>
-          <FontAwesome name="google" size={16} color={theme.tertiary} />
-        </TouchableOpacity>
-      </View>
-
-      <View style={{ position: "absolute", bottom: 60, flexDirection: "row" }}>
-        <Text style={{ color: theme.light, fontSize: 12 }}>
-          Don't have an account?{" "}
-        </Text>
-        <TouchableOpacity style={{ alignItems: "center" }}>
-          <Text style={{ color: theme.tertiary, fontSize: 12 }}>Sign up</Text>
-        </TouchableOpacity>
+          <TouchableOpacity style={{ alignItems: "center" }}>
+            <Text style={{ color: theme.tertiary, fontSize: 12 }}>Sign up</Text>
+          </TouchableOpacity>
+        </Animated.View>
       </View>
     </View>
   );
@@ -142,25 +104,12 @@ const styles = StyleSheet.create({
     alignItems: "center",
     backgroundColor: theme.dark,
   },
-  content_wrapper: {
-    display: "flex",
+  containerWrapper: {
     flexDirection: "column",
+    justifyContent: "center",
     alignItems: "center",
-    width: "100%",
-    padding: 40,
-  },
-
-  brandName: {
-    fontSize: 36,
-    fontWeight: "bold",
-  },
-  viewContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    width: "100%",
-    borderBottomWidth: 2,
-    borderBottomColor: theme.primary,
-    marginVertical: 10,
+    flex: 1,
+    paddingHorizontal: 40,
   },
   buttonContainer: {
     flexDirection: "row",
@@ -169,20 +118,29 @@ const styles = StyleSheet.create({
     width: "100%",
     marginTop: 20,
   },
-  input: {
-    flex: 1,
-    height: "100%",
-    color: theme.primary,
+  divider: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginVertical: 40,
   },
-
-  blobBottomLeft: {
-    position: "absolute",
-    bottom: 0,
-    left: 0,
+  loginOptions: {
+    width: "100%",
+    flexDirection: "row",
+    marginVertical: 10,
+    justifyContent: "flex-end",
   },
-  blobTopRight: {
-    position: "absolute",
-    top: 0,
-    right: 0,
+  loginMethods: {
+    flexDirection: "row",
+    borderColor: theme.tertiary,
+    borderWidth: 2,
+    padding: 12,
+    borderRadius: 50,
+  },
+  lines: { flex: 1, height: 1, backgroundColor: theme.tertiary },
+  touchableButton: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    width: "100%",
+    alignItems: "center",
   },
 });
