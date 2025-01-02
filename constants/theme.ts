@@ -8,6 +8,8 @@ export const theme = {
   danger: '#c5000f',
 
   light: '#f6f8fc',
+
   dark: '#0E0E26',
-  medium: '#212121'
+  medium: '#1A1A3F',
+  high_medium: '#26264D',
 }
