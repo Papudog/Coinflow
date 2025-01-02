@@ -69,6 +69,7 @@ export default function LatestTransactions(): React.JSX.Element {
                   <View style={styles.transactionHeadingContent}>
                     <Text
                       style={{
+                        ...styles.text,
                         fontSize: 16,
                         color: item.color,
                       }}
@@ -80,11 +81,16 @@ export default function LatestTransactions(): React.JSX.Element {
                         <FontAwesome
                           name="caret-down"
                           size={20}
-                          color={item.color}
+                          color={
+                            item.type === "Expense"
+                              ? theme.danger
+                              : theme.success
+                          }
                         />
                       </View>
                       <Text
                         style={{
+                          ...styles.text,
                           color:
                             item.type === "Expense"
                               ? theme.danger
@@ -98,10 +104,8 @@ export default function LatestTransactions(): React.JSX.Element {
                 </View>
 
                 <View style={styles.transactionBody}>
-                  <Text style={styles.transactionText}>
-                    {item.date.toDateString()}
-                  </Text>
-                  <Text style={styles.transactionText}>{item.amount}</Text>
+                  <Text style={styles.text}>{item.date.toDateString()}</Text>
+                  <Text style={styles.text}>{item.amount}</Text>
                 </View>
               </Card>
             </View>
@@ -114,7 +118,7 @@ export default function LatestTransactions(): React.JSX.Element {
 
 const styles = StyleSheet.create({
   transactionsContainer: {
-    marginTop: 20,
+    // marginTop: 20,
     width: "100%",
     height: 400,
   },
@@ -138,14 +142,20 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     padding: 10,
   },
-  transactionText: {
-    color: theme.dark,
-    fontSize: 16,
-    fontWeight: "bold",
-  },
   transactionType: {
     flexDirection: "row",
     gap: 10,
     alignItems: "center",
+  },
+
+  text: {
+    color: theme.light,
+    fontFamily: "Outfit-Regular",
+    fontSize: 16,
+  },
+  text_tertiary: {
+    color: theme.tertiary,
+    fontFamily: "Outfit-Regular",
+    fontSize: 16,
   },
 });

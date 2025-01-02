@@ -46,5 +46,7 @@ const styles = StyleSheet.create({
   input: {
     flex: 1,
     color: theme.light,
+    fontFamily: "Outfit-Regular",
+    fontSize: 16,
   },
 });

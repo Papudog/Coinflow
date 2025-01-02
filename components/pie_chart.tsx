@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { BlurView } from "expo-blur";
 import { theme } from "@/constants/theme";
 import Card from "./card";
@@ -19,6 +19,57 @@ export default function PieGraph(): React.JSX.Element {
     { value: 3, color: "#FFA5BA", gradientCenterColor: "#FF7F97" },
   ];
 
+  const legendComponet = (): React.JSX.Element => {
+    return (
+      <View
+        style={{
+          flexDirection: "row",
+          justifyContent: "center",
+          marginTop: 20,
+        }}
+      >
+        <View
+          style={{
+            flexDirection: "row",
+            alignItems: "center",
+            width: 120,
+            marginRight: 20,
+          }}
+        >
+          <View
+            style={{
+              width: 10,
+              height: 10,
+              backgroundColor: theme.success,
+              borderRadius: 10,
+              marginRight: 20,
+            }}
+          />
+          <Text style={styles.text}>Income</Text>
+        </View>
+        <View
+          style={{
+            flexDirection: "row",
+            alignItems: "center",
+            width: 110,
+            marginRight: 20,
+          }}
+        >
+          <View
+            style={{
+              width: 10,
+              height: 10,
+              backgroundColor: theme.danger,
+              borderRadius: 10,
+              marginRight: 20,
+            }}
+          />
+          <Text style={styles.text}>Expense</Text>
+        </View>
+      </View>
+    );
+  };
+
   return (
     <Card>
       <View style={styles.chartHeading}>
@@ -27,11 +78,23 @@ export default function PieGraph(): React.JSX.Element {
             flexDirection: "row",
             width: "100%",
             alignItems: "center",
-            gap: 10,
+            justifyContent: "space-between",
           }}
         >
-          <FontAwesome name="pie-chart" size={20} color={theme.light} />
-          <Text style={{ fontSize: 16, color: theme.light }}>This month</Text>
+          <View style={{ flexDirection: "row", alignItems: "center", gap: 10 }}>
+            <View>
+              <FontAwesome name="pie-chart" size={18} color={theme.tertiary} />
+            </View>
+            <Text style={{ ...styles.text_tertiary, fontSize: 18 }}>
+              This month
+            </Text>
+          </View>
+
+          <View>
+            <TouchableOpacity>
+              <FontAwesome name="filter" size={18} color={theme.tertiary} />
+            </TouchableOpacity>
+          </View>
         </View>
       </View>
 
@@ -46,11 +109,12 @@ export default function PieGraph(): React.JSX.Element {
           innerCircleColor={"#1A1A3F"}
           centerLabelComponent={(): React.JSX.Element => (
             <View style={{ alignItems: "center" }}>
-              <Text style={{ color: theme.light, fontSize: 16 }}>Amount</Text>
-              <Text style={{ color: theme.light, fontSize: 20 }}>200$</Text>
+              <Text style={styles.text}>Amount</Text>
+              <Text style={{ ...styles.text, fontSize: 20 }}>200$</Text>
             </View>
           )}
-        ></PieChart>
+        />
+        {legendComponet()}
       </View>
     </Card>
   );
@@ -67,5 +131,16 @@ const styles = StyleSheet.create({
   chartContainer: {
     padding: 40,
     alignItems: "center",
+  },
+
+  text: {
+    color: theme.light,
+    fontFamily: "Outfit-Regular",
+    fontSize: 16,
+  },
+  text_tertiary: {
+    color: theme.tertiary,
+    fontFamily: "Outfit-Regular",
+    fontSize: 16,
   },
 });

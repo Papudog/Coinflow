@@ -60,9 +60,7 @@ export default function Login(): React.JSX.Element {
           style={styles.loginOptions}
         >
           <TouchableOpacity>
-            <Text style={{ color: theme.tertiary, fontSize: 12 }}>
-              Forgot password?
-            </Text>
+            <Text style={styles.text_tertiary}>Forgot password?</Text>
           </TouchableOpacity>
         </Animated.View>
 
@@ -75,7 +73,7 @@ export default function Login(): React.JSX.Element {
             disabled={!isFormValid}
             onPress={(): void => onSubmit(email, password)}
           >
-            <Text style={{ color: theme.light }}>Log in</Text>
+            <Text style={styles.text_light}>Log in</Text>
             <FontAwesome name="arrow-right" size={16} color={theme.light} />
           </Pressable>
         </Animated.View>
@@ -87,7 +85,13 @@ export default function Login(): React.JSX.Element {
           <View style={styles.lines} />
           <View>
             <Text
-              style={{ width: 50, textAlign: "center", color: theme.tertiary }}
+              style={{
+                width: 50,
+                fontSize: 16,
+                textAlign: "center",
+                color: theme.tertiary,
+                fontFamily: "Outfit-Regular",
+              }}
             >
               Or
             </Text>
@@ -106,13 +110,16 @@ export default function Login(): React.JSX.Element {
 
         <Animated.View
           entering={FadeInLeft.delay(1000).duration(1000).springify()}
-          style={{ position: "absolute", bottom: 60, flexDirection: "row" }}
+          style={{
+            position: "absolute",
+            bottom: 60,
+            flexDirection: "row",
+            alignItems: "center",
+          }}
         >
-          <Text style={{ color: theme.light, fontSize: 12 }}>
-            Don't have an account?{" "}
-          </Text>
+          <Text style={styles.text_light}>Don't have an account? </Text>
           <TouchableOpacity style={{ alignItems: "center" }}>
-            <Text style={{ color: theme.tertiary, fontSize: 12 }}>Sign up</Text>
+            <Text style={styles.text_tertiary}>Sign up</Text>
           </TouchableOpacity>
         </Animated.View>
       </View>
@@ -165,5 +172,15 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     width: "100%",
     alignItems: "center",
+  },
+  text_light: {
+    color: theme.light,
+    fontFamily: "Outfit-Regular",
+    fontSize: 16,
+  },
+  text_tertiary: {
+    color: theme.tertiary,
+    fontFamily: "Outfit-Regular",
+    fontSize: 16,
   },
 });
