@@ -32,7 +32,7 @@ export default function Login(): React.JSX.Element {
   const onSubmit = (email: string, password: string): void => {
     if (email === "papu@gmail.com" && password === "12345678") {
       console.log("Logged in");
-      router.push({ pathname: "/(tabs)" });
+      router.push({ pathname: "/dashboard" });
     }
   };
 

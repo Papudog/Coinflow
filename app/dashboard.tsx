@@ -10,7 +10,6 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import { rgbaColor } from "react-native-reanimated/lib/typescript/Colors";
 
 export default function Dashboard(): React.JSX.Element {
   return (
