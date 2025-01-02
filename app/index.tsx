@@ -21,7 +21,7 @@ export default function Login(): React.JSX.Element {
   const [email, setEmail, isEmailValid] = useEmail();
   const [password, setPassword, isPasswordValid] = usePassword();
 
-  const [isFormValid, setIsFormValid] = useState(false);
+  const [isFormValid, setIsFormValid] = useState<boolean>(false);
 
   useEffect((): void => {
     isEmailValid && isPasswordValid
