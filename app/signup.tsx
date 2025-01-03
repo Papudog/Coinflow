@@ -6,7 +6,7 @@ import usePassword from "@/hooks/usePassword";
 import { FontAwesome } from "@expo/vector-icons";
 import { router } from "expo-router";
 import { useEffect, useState } from "react";
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Alert, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import Animated, { FadeInDown } from "react-native-reanimated";
 
 export default function SignUp(): React.JSX.Element {
@@ -23,7 +23,7 @@ export default function SignUp(): React.JSX.Element {
 
   const onSubmit = (): void => {
     if (password === passConfirm) console.log("Account created");
-    else console.log("Passwords do not match");
+    else Alert.alert("Passwords do not match");
   };
 
   return (
