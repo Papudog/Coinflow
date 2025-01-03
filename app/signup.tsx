@@ -3,6 +3,7 @@ import CustomInput from "@/components/custom_input";
 import { theme } from "@/constants/theme";
 import useEmail from "@/hooks/useEmail";
 import usePassword from "@/hooks/usePassword";
+import { supabase } from "@/lib/supabase";
 import { FontAwesome } from "@expo/vector-icons";
 import { router } from "expo-router";
 import { useEffect, useState } from "react";
@@ -22,8 +23,24 @@ export default function SignUp(): React.JSX.Element {
   }, [isEmailValid, isPasswordValid]);
 
   const onSubmit = (): void => {
-    if (password === passConfirm) console.log("Account created");
-    else Alert.alert("Passwords do not match");
+    if (password === passConfirm && isFormValid) {
+      signUpWithEmail();
+    } else Alert.alert("Passwords do not match");
+  };
+
+  const signUpWithEmail = async (): Promise<void> => {
+    const {
+      data: { session },
+      error,
+    } = await supabase.auth.signUp({
+      email,
+      password,
+      options: { data: { username } },
+    });
+
+    if (error) Alert.alert(error.message);
+    if (!session)
+      Alert.alert("Please check your inbox for email verification!");
   };
 
   return (
