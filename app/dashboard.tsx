@@ -1,20 +1,13 @@
 import LatestTransactions from "@/components/latest_transactions";
 import PieGraph from "@/components/pie_chart";
+import UserCategories from "@/components/user_categories";
 import { theme } from "@/constants/theme";
-import { FontAwesome } from "@expo/vector-icons";
-import {
-  Image,
-  SafeAreaView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { Image, ScrollView, StyleSheet, Text, View } from "react-native";
 import Animated, { FadeInLeft } from "react-native-reanimated";
 
 export default function Dashboard(): React.JSX.Element {
   return (
-    <SafeAreaView style={styles.container}>
+    <ScrollView style={styles.container}>
       <View style={styles.containerWrapper}>
         <Animated.View
           entering={FadeInLeft.delay(400).duration(400).springify()}
@@ -34,53 +27,11 @@ export default function Dashboard(): React.JSX.Element {
             Coinflow
           </Text>
         </Animated.View>
-
-        <View
-          style={{
-            flexDirection: "row",
-            justifyContent: "space-between",
-            marginBottom: 20,
-          }}
-        >
-          <TouchableOpacity style={styles.buttonFilter}>
-            <FontAwesome name="bars" size={16} color={theme.secondary} />
-            <Text
-              style={{ ...styles.text, fontSize: 16, color: theme.secondary }}
-            >
-              Categories
-            </Text>
-          </TouchableOpacity>
-        </View>
-
+        <UserCategories />
         <PieGraph />
-
-        <Animated.View
-          style={{
-            flexDirection: "row",
-            justifyContent: "space-between",
-            alignItems: "center",
-            marginVertical: 20,
-          }}
-          entering={FadeInLeft.delay(600).duration(600).springify()}
-        >
-          <View style={{ width: "50%" }}>
-            <Text style={{ ...styles.text_tertiary, fontSize: 24 }}>
-              Transactions
-            </Text>
-          </View>
-          <TouchableOpacity style={styles.buttonFilter}>
-            <FontAwesome name="plus" size={16} color={theme.secondary} />
-            <Text
-              style={{ ...styles.text, fontSize: 16, color: theme.secondary }}
-            >
-              Add
-            </Text>
-          </TouchableOpacity>
-        </Animated.View>
-
         <LatestTransactions />
       </View>
-    </SafeAreaView>
+    </ScrollView>
   );
 }
 

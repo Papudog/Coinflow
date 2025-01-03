@@ -4,6 +4,7 @@ import { FlatList, ScrollView, StyleSheet, Text, View } from "react-native";
 import { theme } from "@/constants/theme";
 import { FontAwesome } from "@expo/vector-icons";
 import Animated, { FadeInLeft } from "react-native-reanimated";
+import { TouchableOpacity } from "react-native";
 
 export default function LatestTransactions(): React.JSX.Element {
   const transactions = [
@@ -58,84 +59,120 @@ export default function LatestTransactions(): React.JSX.Element {
   ];
 
   return (
-    <View style={styles.transactionsContainer}>
-      <View style={styles.transactionsWrapper}>
-        <FlatList
-          data={transactions}
-          keyExtractor={(transactions) => transactions.id.toString()}
-          renderItem={({ item, index }) => (
-            <Animated.View
-              entering={FadeInLeft.delay((index + 1) * 400)
-                .duration(400)
-                .springify()}
-              style={{ marginVertical: 5 }}
-            >
-              <Card>
-                <View style={styles.transactionHeading}>
-                  <View style={styles.transactionHeadingContent}>
+    <Animated.View
+      entering={FadeInLeft.delay(600).duration(600).springify()}
+      style={{ marginVertical: 20 }}
+    >
+      <View
+        style={{
+          flexDirection: "row",
+          justifyContent: "space-between",
+          alignItems: "center",
+          marginBottom: 10,
+        }}
+      >
+        <View style={{ width: "50%" }}>
+          <Text style={{ ...styles.text_tertiary, fontSize: 24 }}>
+            Transactions
+          </Text>
+        </View>
+        <TouchableOpacity
+          style={{
+            ...styles.buttonFilter,
+            borderWidth: 0,
+            backgroundColor: "transparent",
+          }}
+        >
+          <FontAwesome name="plus" size={16} color={theme.secondary} />
+          <Text
+            style={{ ...styles.text, fontSize: 16, color: theme.secondary }}
+          >
+            Add
+          </Text>
+        </TouchableOpacity>
+      </View>
+
+      <FlatList
+        data={transactions}
+        keyExtractor={(transactions) => transactions.id.toString()}
+        horizontal={false}
+        showsVerticalScrollIndicator={false}
+        scrollEnabled={false}
+        renderItem={({ item, index }) => (
+          <Animated.View
+            entering={FadeInLeft.delay((index + 1) * 400)
+              .duration(400)
+              .springify()}
+            style={{ marginVertical: 5 }}
+          >
+            <Card>
+              <View style={styles.transactionHeading}>
+                <View style={styles.transactionHeadingContent}>
+                  <Text
+                    style={{
+                      ...styles.text,
+                      fontSize: 16,
+                      color: item.color,
+                    }}
+                  >
+                    {item.category}
+                  </Text>
+                  <View style={styles.transactionType}>
+                    <View>
+                      <FontAwesome
+                        name="caret-down"
+                        size={20}
+                        color={
+                          item.type === "Expense" ? theme.danger : theme.success
+                        }
+                      />
+                    </View>
                     <Text
                       style={{
                         ...styles.text,
-                        fontSize: 16,
-                        color: item.color,
+                        color:
+                          item.type === "Expense"
+                            ? theme.danger
+                            : theme.success,
                       }}
                     >
-                      {item.category}
+                      {item.type}
                     </Text>
-                    <View style={styles.transactionType}>
-                      <View>
-                        <FontAwesome
-                          name="caret-down"
-                          size={20}
-                          color={
-                            item.type === "Expense"
-                              ? theme.danger
-                              : theme.success
-                          }
-                        />
-                      </View>
-                      <Text
-                        style={{
-                          ...styles.text,
-                          color:
-                            item.type === "Expense"
-                              ? theme.danger
-                              : theme.success,
-                        }}
-                      >
-                        {item.type}
-                      </Text>
-                    </View>
                   </View>
                 </View>
+              </View>
 
-                <View style={styles.transactionBody}>
-                  <Text style={styles.text}>{item.date.toDateString()}</Text>
-                  <Text style={styles.text}>{item.amount}</Text>
-                </View>
-              </Card>
-            </Animated.View>
-          )}
-        />
-      </View>
-    </View>
+              <View style={styles.transactionBody}>
+                <Text style={styles.text}>{item.date.toDateString()}</Text>
+                <Text style={styles.text}>{item.amount}</Text>
+              </View>
+            </Card>
+          </Animated.View>
+        )}
+      />
+    </Animated.View>
   );
 }
 
 const styles = StyleSheet.create({
-  transactionsContainer: {
-    height: "100%",
-  },
-  transactionsWrapper: {
-    maxHeight: 300,
-    flexDirection: "column",
-  },
   transactionHeading: {
     borderBottomColor: theme.high_medium,
     borderBottomWidth: 2,
     backgroundColor: theme.dark,
     paddingVertical: 2,
     paddingHorizontal: 10,
+  },
+  buttonFilter: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: 8,
+    backgroundColor: "rgba(131, 208, 255, 0.1)",
+    borderColor: theme.secondary,
+    borderWidth: 1,
+    paddingHorizontal: 12,
+    paddingVertical: 4,
+    borderRadius: 12,
   },
   transactionHeadingContent: {
     flexDirection: "row",
