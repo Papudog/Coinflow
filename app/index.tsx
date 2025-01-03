@@ -14,6 +14,7 @@ import Logo from "@/components/svgs/logo";
 import CustomInput from "@/components/custom_input";
 import useEmail from "@/hooks/useEmail";
 import usePassword from "@/hooks/usePassword";
+import ButtonSubmit from "@/components/button_submit";
 
 export default function Login(): React.JSX.Element {
   const router: Router = useRouter();
@@ -24,9 +25,7 @@ export default function Login(): React.JSX.Element {
   const [isFormValid, setIsFormValid] = useState<boolean>(false);
 
   useEffect((): void => {
-    isEmailValid && isPasswordValid
-      ? setIsFormValid(true)
-      : setIsFormValid(false);
+    setIsFormValid(isEmailValid && isPasswordValid);
   }, [isEmailValid, isPasswordValid]);
 
   const onSubmit = (email: string, password: string): void => {
@@ -66,16 +65,15 @@ export default function Login(): React.JSX.Element {
 
         <Animated.View
           entering={FadeInDown.delay(600).duration(1000).springify()}
-          style={styles.buttonContainer}
+          style={{ width: "100%" }}
         >
-          <Pressable
-            style={styles.touchableButton}
+          <ButtonSubmit
+            onPress={() => onSubmit(email, password)}
             disabled={!isFormValid}
-            onPress={(): void => onSubmit(email, password)}
           >
             <Text style={styles.text_light}>Log in</Text>
             <FontAwesome name="arrow-right" size={16} color={theme.light} />
-          </Pressable>
+          </ButtonSubmit>
         </Animated.View>
 
         <Animated.View
@@ -86,11 +84,9 @@ export default function Login(): React.JSX.Element {
           <View>
             <Text
               style={{
+                ...styles.text_tertiary,
                 width: 50,
-                fontSize: 16,
                 textAlign: "center",
-                color: theme.tertiary,
-                fontFamily: "Outfit-Regular",
               }}
             >
               Or
@@ -118,7 +114,10 @@ export default function Login(): React.JSX.Element {
           }}
         >
           <Text style={styles.text_light}>Don't have an account? </Text>
-          <TouchableOpacity style={{ alignItems: "center" }}>
+          <TouchableOpacity
+            style={{ alignItems: "center" }}
+            onPress={() => router.push({ pathname: "/signup" })}
+          >
             <Text style={styles.text_tertiary}>Sign up</Text>
           </TouchableOpacity>
         </Animated.View>

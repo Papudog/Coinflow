@@ -29,12 +29,8 @@ export default function RootLayout(): React.JSX.Element | null {
     >
       {/* <Stack.Screen name="index" /> */}
       <Stack.Screen name="index" options={{ title: "Login" }} />
-      <Stack.Screen
-        name="dashboard"
-        options={{
-          title: "Dashboard",
-        }}
-      />
+      <Stack.Screen name="signup" options={{ title: "Sign Up" }} />
+      <Stack.Screen name="dashboard" options={{ title: "Dashboard" }} />
     </Stack>
   );
 }

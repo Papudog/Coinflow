@@ -10,12 +10,16 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+import Animated, { FadeInLeft } from "react-native-reanimated";
 
 export default function Dashboard(): React.JSX.Element {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.containerWrapper}>
-        <View style={styles.nameApp}>
+        <Animated.View
+          entering={FadeInLeft.delay(400).duration(400).springify()}
+          style={styles.nameApp}
+        >
           <Image
             source={require("@/assets/images/bud_logo.png")}
             style={{ width: 40, height: 32 }}
@@ -29,17 +33,18 @@ export default function Dashboard(): React.JSX.Element {
           >
             Coinflow
           </Text>
-        </View>
+        </Animated.View>
 
         <PieGraph />
 
-        <View
+        <Animated.View
           style={{
             flexDirection: "row",
             justifyContent: "space-between",
             alignItems: "center",
             marginVertical: 20,
           }}
+          entering={FadeInLeft.delay(600).duration(600).springify()}
         >
           <View style={{ width: "50%" }}>
             <Text style={{ ...styles.text_tertiary, fontSize: 24 }}>
@@ -54,7 +59,7 @@ export default function Dashboard(): React.JSX.Element {
               Add
             </Text>
           </TouchableOpacity>
-        </View>
+        </Animated.View>
 
         <LatestTransactions />
       </View>

@@ -5,6 +5,10 @@ import Card from "./card";
 import { PieChart } from "react-native-gifted-charts";
 import { FontAwesome } from "@expo/vector-icons";
 import React from "react";
+import Animated, {
+  FadeInLeft,
+  FadingTransition,
+} from "react-native-reanimated";
 
 export default function PieGraph(): React.JSX.Element {
   const pieData = [
@@ -71,52 +75,60 @@ export default function PieGraph(): React.JSX.Element {
   };
 
   return (
-    <Card>
-      <View style={styles.chartHeading}>
-        <View
-          style={{
-            flexDirection: "row",
-            width: "100%",
-            alignItems: "center",
-            justifyContent: "space-between",
-          }}
-        >
-          <View style={{ flexDirection: "row", alignItems: "center", gap: 10 }}>
-            <View>
-              <FontAwesome name="pie-chart" size={18} color={theme.tertiary} />
+    <Animated.View entering={FadeInLeft.delay(400).duration(400).springify()}>
+      <Card>
+        <View style={styles.chartHeading}>
+          <View
+            style={{
+              flexDirection: "row",
+              width: "100%",
+              alignItems: "center",
+              justifyContent: "space-between",
+            }}
+          >
+            <View
+              style={{ flexDirection: "row", alignItems: "center", gap: 10 }}
+            >
+              <View>
+                <FontAwesome
+                  name="pie-chart"
+                  size={18}
+                  color={theme.tertiary}
+                />
+              </View>
+              <Text style={{ ...styles.text_tertiary, fontSize: 18 }}>
+                This month
+              </Text>
             </View>
-            <Text style={{ ...styles.text_tertiary, fontSize: 18 }}>
-              This month
-            </Text>
-          </View>
 
-          <View>
-            <TouchableOpacity>
-              <FontAwesome name="filter" size={18} color={theme.tertiary} />
-            </TouchableOpacity>
+            <View>
+              <TouchableOpacity>
+                <FontAwesome name="filter" size={18} color={theme.tertiary} />
+              </TouchableOpacity>
+            </View>
           </View>
         </View>
-      </View>
 
-      <View style={styles.chartContainer}>
-        <PieChart
-          data={pieData}
-          donut
-          showGradient
-          sectionAutoFocus
-          radius={90}
-          innerRadius={60}
-          innerCircleColor={"#1A1A3F"}
-          centerLabelComponent={(): React.JSX.Element => (
-            <View style={{ alignItems: "center" }}>
-              <Text style={styles.text}>Amount</Text>
-              <Text style={{ ...styles.text, fontSize: 20 }}>200$</Text>
-            </View>
-          )}
-        />
-        {legendComponet()}
-      </View>
-    </Card>
+        <View style={styles.chartContainer}>
+          <PieChart
+            data={pieData}
+            donut
+            showGradient
+            sectionAutoFocus
+            radius={90}
+            innerRadius={60}
+            innerCircleColor={"#1A1A3F"}
+            centerLabelComponent={(): React.JSX.Element => (
+              <View style={{ alignItems: "center" }}>
+                <Text style={styles.text}>Amount</Text>
+                <Text style={{ ...styles.text, fontSize: 20 }}>200$</Text>
+              </View>
+            )}
+          />
+          {legendComponet()}
+        </View>
+      </Card>
+    </Animated.View>
   );
 }
 

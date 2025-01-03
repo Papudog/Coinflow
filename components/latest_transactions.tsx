@@ -3,6 +3,7 @@ import Card from "./card";
 import { FlatList, ScrollView, StyleSheet, Text, View } from "react-native";
 import { theme } from "@/constants/theme";
 import { FontAwesome } from "@expo/vector-icons";
+import Animated, { FadeInLeft } from "react-native-reanimated";
 
 export default function LatestTransactions(): React.JSX.Element {
   const transactions = [
@@ -62,8 +63,13 @@ export default function LatestTransactions(): React.JSX.Element {
         <FlatList
           data={transactions}
           keyExtractor={(transactions) => transactions.id.toString()}
-          renderItem={({ item }) => (
-            <View style={{ marginVertical: 5 }}>
+          renderItem={({ item, index }) => (
+            <Animated.View
+              entering={FadeInLeft.delay((index + 1) * 400)
+                .duration(400)
+                .springify()}
+              style={{ marginVertical: 5 }}
+            >
               <Card>
                 <View style={styles.transactionHeading}>
                   <View style={styles.transactionHeadingContent}>
@@ -108,7 +114,7 @@ export default function LatestTransactions(): React.JSX.Element {
                   <Text style={styles.text}>{item.amount}</Text>
                 </View>
               </Card>
-            </View>
+            </Animated.View>
           )}
         />
       </View>
@@ -118,11 +124,10 @@ export default function LatestTransactions(): React.JSX.Element {
 
 const styles = StyleSheet.create({
   transactionsContainer: {
-    // marginTop: 20,
-    width: "100%",
-    height: 400,
+    height: "100%",
   },
   transactionsWrapper: {
+    maxHeight: 300,
     flexDirection: "column",
   },
   transactionHeading: {
