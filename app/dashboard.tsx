@@ -35,6 +35,23 @@ export default function Dashboard(): React.JSX.Element {
           </Text>
         </Animated.View>
 
+        <View
+          style={{
+            flexDirection: "row",
+            justifyContent: "space-between",
+            marginBottom: 20,
+          }}
+        >
+          <TouchableOpacity style={styles.buttonFilter}>
+            <FontAwesome name="bars" size={16} color={theme.secondary} />
+            <Text
+              style={{ ...styles.text, fontSize: 16, color: theme.secondary }}
+            >
+              Categories
+            </Text>
+          </TouchableOpacity>
+        </View>
+
         <PieGraph />
 
         <Animated.View

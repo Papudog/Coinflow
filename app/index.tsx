@@ -1,12 +1,6 @@
 import { Router, useRouter } from "expo-router";
 import { useEffect, useState } from "react";
-import {
-  Pressable,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { Alert, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { FontAwesome } from "@expo/vector-icons";
 import Animated, { FadeInDown, FadeInLeft } from "react-native-reanimated";
 import { theme } from "@/constants/theme";
@@ -15,6 +9,7 @@ import CustomInput from "@/components/custom_input";
 import useEmail from "@/hooks/useEmail";
 import usePassword from "@/hooks/usePassword";
 import ButtonSubmit from "@/components/button_submit";
+import { supabase } from "@/lib/supabase";
 
 export default function Login(): React.JSX.Element {
   const router: Router = useRouter();
@@ -28,11 +23,18 @@ export default function Login(): React.JSX.Element {
     setIsFormValid(isEmailValid && isPasswordValid);
   }, [isEmailValid, isPasswordValid]);
 
-  const onSubmit = (email: string, password: string): void => {
-    if (email === "papu@gmail.com" && password === "12345678") {
-      console.log("Logged in");
-      router.push({ pathname: "/dashboard" });
-    }
+  const onSubmit = (): void => {
+    if (isFormValid) signInWithEmail();
+  };
+
+  const signInWithEmail = async (): Promise<void> => {
+    const { error } = await supabase.auth.signInWithPassword({
+      email: email,
+      password: password,
+    });
+
+    if (error) Alert.alert(error.message);
+    else router.push({ pathname: "/dashboard" });
   };
 
   return (
@@ -68,7 +70,7 @@ export default function Login(): React.JSX.Element {
           style={{ width: "100%" }}
         >
           <ButtonSubmit
-            onPress={() => onSubmit(email, password)}
+            onPress={(): void => onSubmit()}
             disabled={!isFormValid}
           >
             <Text style={styles.text_light}>Log in</Text>

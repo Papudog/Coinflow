@@ -39,8 +39,10 @@ export default function SignUp(): React.JSX.Element {
     });
 
     if (error) Alert.alert(error.message);
-    if (!session)
+    if (!session) {
       Alert.alert("Please check your inbox for email verification!");
+      router.push({ pathname: "/" });
+    }
   };
 
   return (

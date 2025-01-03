@@ -1,7 +1,8 @@
 import { useFonts } from "expo-font";
 import * as SplashScreen from "expo-splash-screen";
-import { Stack } from "expo-router";
-import React, { useEffect } from "react";
+import { router, Router, Stack, useRouter } from "expo-router";
+import React, { useEffect, useState } from "react";
+import { supabase } from "@/lib/supabase";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -11,13 +12,33 @@ export default function RootLayout(): React.JSX.Element | null {
     "Outfit-Bold": require("../assets/fonts/Outfit-Bold.ttf"),
   });
 
+  const [isScreenReady, setIsScreenReady] = useState(false);
+
   useEffect(() => {
-    if (loaded || error) {
-      SplashScreen.hideAsync();
-    }
+    const initializeApp = async () => {
+      try {
+        if (!loaded && !error) {
+          return;
+        }
+
+        const {
+          data: { session },
+        } = await supabase.auth.getSession();
+
+        if (session) router.push("/dashboard");
+        else router.push("/");
+      } catch (err) {
+        console.error(err);
+      } finally {
+        setIsScreenReady(true);
+        await SplashScreen.hideAsync();
+      }
+    };
+
+    initializeApp();
   }, [loaded, error]);
 
-  if (!loaded && !error) {
+  if (!isScreenReady) {
     return null;
   }
 
