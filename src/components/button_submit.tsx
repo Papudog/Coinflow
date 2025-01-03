@@ -1,4 +1,4 @@
-import { theme } from "@/constants/theme";
+import { theme } from "@/src/constants/theme";
 import React from "react";
 import { StyleSheet } from "react-native";
 import { Text, TouchableOpacity, View } from "react-native";

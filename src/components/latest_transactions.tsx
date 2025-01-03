@@ -1,7 +1,7 @@
 import React from "react";
 import Card from "./card";
 import { FlatList, ScrollView, StyleSheet, Text, View } from "react-native";
-import { theme } from "@/constants/theme";
+import { theme } from "@/src/constants/theme";
 import { FontAwesome } from "@expo/vector-icons";
 import Animated, { FadeInLeft } from "react-native-reanimated";
 import { TouchableOpacity } from "react-native";

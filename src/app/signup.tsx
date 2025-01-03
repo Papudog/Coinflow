@@ -1,8 +1,8 @@
-import ButtonSubmit from "@/components/button_submit";
-import CustomInput from "@/components/custom_input";
-import { theme } from "@/constants/theme";
-import useEmail from "@/hooks/useEmail";
-import usePassword from "@/hooks/usePassword";
+import ButtonSubmit from "@/src/components/button_submit";
+import CustomInput from "@/src/components/custom_input";
+import { theme } from "@/src/constants/theme";
+import useEmail from "@/src/hooks/useEmail";
+import usePassword from "@/src/hooks/usePassword";
 import { supabase } from "@/lib/supabase";
 import { FontAwesome } from "@expo/vector-icons";
 import { router } from "expo-router";

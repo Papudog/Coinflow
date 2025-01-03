@@ -1,4 +1,4 @@
-import { theme } from "@/constants/theme";
+import { theme } from "@/src/constants/theme";
 import React from "react";
 import { StyleSheet, View } from "react-native";
 import { BlurView } from "expo-blur";

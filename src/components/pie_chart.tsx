@@ -1,6 +1,6 @@
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { BlurView } from "expo-blur";
-import { theme } from "@/constants/theme";
+import { theme } from "@/src/constants/theme";
 import Card from "./card";
 import { PieChart } from "react-native-gifted-charts";
 import { FontAwesome } from "@expo/vector-icons";

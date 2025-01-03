@@ -1,4 +1,4 @@
-import { theme } from "@/constants/theme";
+import { theme } from "@/src/constants/theme";
 import { ColorValue, StyleSheet, TextInput, View } from "react-native";
 import Animated, { FadeInDown } from "react-native-reanimated";
 

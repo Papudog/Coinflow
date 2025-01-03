@@ -1,7 +1,7 @@
-import LatestTransactions from "@/components/latest_transactions";
-import PieGraph from "@/components/pie_chart";
-import UserCategories from "@/components/user_categories";
-import { theme } from "@/constants/theme";
+import LatestTransactions from "@/src/components/latest_transactions";
+import PieGraph from "@/src/components/pie_chart";
+import UserCategories from "@/src/components/user_categories";
+import { theme } from "@/src/constants/theme";
 import { Image, ScrollView, StyleSheet, Text, View } from "react-native";
 import Animated, { FadeInLeft } from "react-native-reanimated";
 
@@ -14,7 +14,7 @@ export default function Dashboard(): React.JSX.Element {
           style={styles.nameApp}
         >
           <Image
-            source={require("@/assets/images/bud_logo.png")}
+            source={require("../assets/images/bud_logo.png")}
             style={{ width: 40, height: 32 }}
           />
           <Text
