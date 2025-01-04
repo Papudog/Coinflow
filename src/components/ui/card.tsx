@@ -17,11 +17,12 @@ export default function Card({ children }: CardProps): React.JSX.Element {
 
 const styles = StyleSheet.create({
   cardContainer: {
-    width: "100%",
+    width: 150,
   },
 
   cardWrapper: {
     width: "100%",
+    height: 130,
     borderRadius: 10,
     borderWidth: 1,
     borderColor: "rgba(255, 255, 255, 0.1)",

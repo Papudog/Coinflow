@@ -1,24 +1,27 @@
 import { theme } from "@/src/constants/theme";
 import { FontAwesome } from "@expo/vector-icons";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { StyleSheet, Text, TouchableOpacity } from "react-native";
 import { FlatList, View } from "react-native";
 import Animated, { FadeInLeft } from "react-native-reanimated";
-import { useSheet } from "../providers/sheet_provider";
+import { useSheet } from "../../providers/sheet_provider";
 import CategoriesSheet from "./categories_sheet";
 import { supabase } from "@/lib/supabase";
-import { Category } from "../models/categories";
-import { CATEGORIES } from "../constants/supabase";
-import { useCategory } from "../providers/category_provider";
+import { Category } from "../../models/categories";
+import { CATEGORIES } from "../../constants/supabase";
+import { useCategory } from "../../providers/category_provider";
 
 export default function UserCategories(): React.JSX.Element {
   const { openBottomSheet } = useSheet();
-  const { status } = useCategory();
-  const [data, setData] = React.useState<Category[]>([]);
+  const { status, setCategories } = useCategory();
+  const [data, setData] = useState<Category[]>([]);
 
   useEffect((): void => {
     getCategories()
-      .then((resolve): void => setData(resolve))
+      .then((resolve): void => {
+        setData(resolve);
+        setCategories(resolve);
+      })
       .catch(console.error);
   }, [status]);
 

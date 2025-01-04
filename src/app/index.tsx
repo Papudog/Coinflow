@@ -4,11 +4,11 @@ import { Alert, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { FontAwesome } from "@expo/vector-icons";
 import Animated, { FadeInDown, FadeInLeft } from "react-native-reanimated";
 import { theme } from "@/src/constants/theme";
-import Logo from "@/src/components/svgs/logo";
-import CustomInput from "@/src/components/ui/login/custom_input";
+import Logo from "@/src/components/ui/svgs/logo";
+import CustomInput from "@/src/components/login/custom_input";
 import useEmail from "@/src/hooks/useEmail";
 import usePassword from "@/src/hooks/usePassword";
-import ButtonSubmit from "@/src/components/ui/login/button_submit";
+import ButtonSubmit from "@/src/components/login/button_submit";
 import { supabase } from "@/lib/supabase";
 
 export default function Login(): React.JSX.Element {

@@ -1,6 +1,7 @@
 import { StyleSheet, Text, View } from "react-native";
-import { theme } from "../constants/theme";
+import { theme } from "../../constants/theme";
 import Animated, { FadeInLeft } from "react-native-reanimated";
+import TransactionList from "./expense_list";
 import PieGraph from "./pie_graph";
 
 export default function ExpenseSection(): React.JSX.Element {
@@ -17,6 +18,9 @@ export default function ExpenseSection(): React.JSX.Element {
           </View>
           {/* Pie Graph */}
           <PieGraph />
+        </View>
+        <View style={{ marginVertical: 30 }}>
+          <TransactionList />
         </View>
       </View>
     </Animated.View>

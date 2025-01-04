@@ -1,13 +1,11 @@
-import LatestTransactions from "@/src/components/latest_transactions";
-import PieGraph from "@/src/components/pie_graph";
-import UserCategories from "@/src/components/user_categories";
+import UserCategories from "@/src/components/categories/categories_list";
 import { theme } from "@/src/constants/theme";
 import { useEffect } from "react";
 import { Image, ScrollView, StyleSheet, Text, View } from "react-native";
 import Animated, { FadeInLeft } from "react-native-reanimated";
 import { useUser } from "../providers/user_provider";
 import { supabase } from "@/lib/supabase";
-import ExpenseSection from "../components/expense_section";
+import ExpenseSection from "../components/expense/expense_section";
 
 export default function Dashboard(): React.JSX.Element {
   const { setUuid } = useUser();
@@ -45,7 +43,6 @@ export default function Dashboard(): React.JSX.Element {
         <View>
           <UserCategories />
           <ExpenseSection />
-          <LatestTransactions />
         </View>
       </View>
     </ScrollView>
