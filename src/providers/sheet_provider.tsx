@@ -7,7 +7,7 @@ import {
   useRef,
   useState,
 } from "react";
-import Sheet from "../components/ui/sheet";
+import Sheet from "../components/ui/sheet/sheet";
 
 interface SheetProps {
   openBottomSheet: (node: ReactNode) => void;

@@ -1,10 +1,10 @@
 import { StyleSheet, Text } from "react-native";
 import { View } from "react-native";
 import { theme } from "../constants/theme";
-import SheetInput from "./ui/sheet_input";
+import SheetInput from "./ui/sheet/sheet_input";
 import { useEffect, useState } from "react";
 import ColorPicker from "./ui/color_picker";
-import SheetButton from "./ui/sheet_button";
+import SheetButton from "./ui/sheet/sheet_button";
 
 export default function CategoriesSheet(): React.JSX.Element {
   const [categoryName, setCategoryName] = useState<string>("");
