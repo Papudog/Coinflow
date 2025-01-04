@@ -5,6 +5,7 @@ import {
   useEffect,
   useState,
 } from "react";
+import { Category } from "../models/categories";
 
 interface CategoryContextProps {
   name: string;

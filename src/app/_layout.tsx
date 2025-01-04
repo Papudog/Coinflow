@@ -5,6 +5,9 @@ import React, { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
 import UserProvider from "../providers/user_provider";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
+import SheetProvider from "../providers/sheet_provider";
+import CategoryProvider from "../providers/category_provider";
+import AppProviders from "../providers/app_providers";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -47,7 +50,7 @@ export default function RootLayout(): React.JSX.Element | null {
 
   return (
     <GestureHandlerRootView>
-      <UserProvider>
+      <AppProviders>
         <Stack
           screenOptions={{
             headerShown: false,
@@ -57,7 +60,7 @@ export default function RootLayout(): React.JSX.Element | null {
           <Stack.Screen name="signup" options={{ title: "Sign Up" }} />
           <Stack.Screen name="dashboard" options={{ title: "Dashboard" }} />
         </Stack>
-      </UserProvider>
+      </AppProviders>
     </GestureHandlerRootView>
   );
 }

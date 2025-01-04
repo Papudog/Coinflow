@@ -8,6 +8,7 @@ import Animated, { FadeInLeft } from "react-native-reanimated";
 import { useUser } from "../providers/user_provider";
 import { supabase } from "@/lib/supabase";
 import SheetProvider from "../providers/sheet_provider";
+import CategoryProvider from "../providers/category_provider";
 
 export default function Dashboard(): React.JSX.Element {
   const { setUuid } = useUser();
@@ -21,36 +22,34 @@ export default function Dashboard(): React.JSX.Element {
   }, []);
 
   return (
-    <SheetProvider>
-      <ScrollView style={styles.container}>
-        <View style={styles.containerWrapper}>
-          <Animated.View
-            entering={FadeInLeft.delay(400).duration(400).springify()}
-            style={styles.header}
+    <ScrollView style={styles.container}>
+      <View style={styles.containerWrapper}>
+        <Animated.View
+          entering={FadeInLeft.delay(400).duration(400).springify()}
+          style={styles.header}
+        >
+          <Image
+            source={require("../assets/images/bud_logo.png")}
+            style={{ width: 40, height: 32 }}
+          />
+          <Text
+            style={{
+              ...styles.text,
+              fontFamily: "Outfit-Bold",
+              fontSize: 32,
+            }}
           >
-            <Image
-              source={require("../assets/images/bud_logo.png")}
-              style={{ width: 40, height: 32 }}
-            />
-            <Text
-              style={{
-                ...styles.text,
-                fontFamily: "Outfit-Bold",
-                fontSize: 32,
-              }}
-            >
-              Coinflow
-            </Text>
-          </Animated.View>
+            Coinflow
+          </Text>
+        </Animated.View>
 
-          <View>
-            <UserCategories />
-            <PieGraph />
-            <LatestTransactions />
-          </View>
+        <View>
+          <UserCategories />
+          <PieGraph />
+          <LatestTransactions />
         </View>
-      </ScrollView>
-    </SheetProvider>
+      </View>
+    </ScrollView>
   );
 }
 

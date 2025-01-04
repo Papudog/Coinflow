@@ -1,50 +1,24 @@
 import { theme } from "@/src/constants/theme";
 import { FontAwesome } from "@expo/vector-icons";
-import React from "react";
+import React, { useEffect } from "react";
 import { StyleSheet, Text, TouchableOpacity } from "react-native";
 import { FlatList, View } from "react-native";
 import Animated, { FadeInLeft } from "react-native-reanimated";
 import { useSheet } from "../providers/sheet_provider";
 import CategoriesSheet from "./categories_sheet";
 import { supabase } from "@/lib/supabase";
+import { useCategory } from "../providers/category_provider";
+import { Category } from "../models/categories";
+import { CATEGORIES } from "../constants/supabase";
 
 export default function UserCategories(): React.JSX.Element {
   const { openBottomSheet } = useSheet();
+  const [data, setData] = React.useState<Category[]>([]);
 
-  const data = [
-    {
-      id: 1,
-      category: "🦐 Food",
-      amount: 20,
-      date: new Date(),
-      color: "#93FCF8",
-      type: "Expense",
-    },
-    {
-      id: 2,
-      category: "🏍️ Transport",
-      amount: 10,
-      date: new Date(),
-      color: "#BDB2FA",
-      type: "Expense",
-    },
-    {
-      id: 3,
-      category: "🍿 Entertainment",
-      amount: 20,
-      date: new Date(),
-      color: "#93FCF8",
-      type: "Expense",
-    },
-    {
-      id: 4,
-      category: "🎉 Party",
-      amount: 10,
-      date: new Date(),
-      color: "#BDB2FA",
-      type: "Expense",
-    },
-  ];
+  // Cuando se cierre el bottom sheet deberia actualizar aqui.
+  useEffect((): void => {
+    getCategories().then((resolve) => setData(resolve));
+  }, []);
 
   return (
     <Animated.View
@@ -83,7 +57,7 @@ export default function UserCategories(): React.JSX.Element {
 
       <FlatList
         data={data}
-        keyExtractor={(data) => data.id.toString()}
+        keyExtractor={(data: Category) => data && data.id.toString()}
         horizontal={true}
         renderItem={({ item }) => (
           <TouchableOpacity
@@ -95,7 +69,7 @@ export default function UserCategories(): React.JSX.Element {
           >
             <View>
               <Text style={{ ...styles.text, color: item.color, fontSize: 14 }}>
-                {item.category}
+                {item.name}
               </Text>
             </View>
           </TouchableOpacity>
@@ -105,14 +79,17 @@ export default function UserCategories(): React.JSX.Element {
   );
 }
 
-async function getCategories(): Promise<void> {
-  try {
-    const { data, error } = await supabase.from("categories").select("*");
-    if (error) throw error;
-    console.log("Categories: ", data);
-  } catch (error) {
-    console.log("Error getting categories: ", error);
-  }
+function getCategories(): Promise<Category[]> {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const { data, error } = await supabase.from(CATEGORIES).select("*");
+      if (error) throw error;
+      resolve(data);
+    } catch (error) {
+      console.log("Error getting categories: ", error);
+      reject(error);
+    }
+  });
 }
 
 const styles = StyleSheet.create({

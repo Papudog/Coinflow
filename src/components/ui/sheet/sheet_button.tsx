@@ -1,5 +1,7 @@
 import { supabase } from "@/lib/supabase";
+import { CATEGORIES } from "@/src/constants/supabase";
 import { theme } from "@/src/constants/theme";
+import { Category } from "@/src/models/categories";
 import { useCategory } from "@/src/providers/category_provider";
 import { useSheet } from "@/src/providers/sheet_provider";
 import { useUser } from "@/src/providers/user_provider";
@@ -42,9 +44,10 @@ async function onSubmit(
 ): Promise<void> {
   try {
     const { error } = await supabase
-      .from("categories")
+      .from(CATEGORIES)
       .insert({ color, name, profile_id });
     if (error) throw error;
+
     Alert.alert("Category saved successfully");
     closeBottomSheet();
   } catch (error) {
