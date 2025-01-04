@@ -1,17 +1,29 @@
 import { supabase } from "@/lib/supabase";
-import { CATEGORIES } from "@/src/constants/supabase";
+import { CATEGORIES, CATEGORY_SUCCESS } from "@/src/constants/supabase";
 import { theme } from "@/src/constants/theme";
-import { Category } from "@/src/models/categories";
 import { useCategory } from "@/src/providers/category_provider";
 import { useSheet } from "@/src/providers/sheet_provider";
 import { useUser } from "@/src/providers/user_provider";
 import React from "react";
-import { Alert, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  ToastAndroid,
+  TouchableOpacity,
+  View,
+} from "react-native";
 
 export default function SheetButton(): React.JSX.Element {
-  const { color, name, isInputNotDisabled } = useCategory();
+  const { color, name, setName, setColor, isInputNotDisabled, setStatus } =
+    useCategory();
   const { closeBottomSheet } = useSheet();
   const { uuid } = useUser();
+
+  const handlerStates = (): void => {
+    setName("");
+    setColor("");
+    setStatus(0);
+  };
 
   return (
     <View
@@ -24,7 +36,14 @@ export default function SheetButton(): React.JSX.Element {
       <TouchableOpacity
         disabled={!isInputNotDisabled}
         onPress={(): Promise<void> =>
-          onSubmit(color, name, uuid, closeBottomSheet)
+          onSubmit(
+            color,
+            name,
+            uuid,
+            setStatus,
+            closeBottomSheet,
+            handlerStates
+          )
         }
         style={styles.touchableButton}
       >
@@ -40,15 +59,19 @@ async function onSubmit(
   color: string,
   name: string,
   profile_id: string,
-  closeBottomSheet: () => void
+  setStatus: (status: number) => void,
+  closeBottomSheet: () => void,
+  handlerStates: () => void
 ): Promise<void> {
   try {
-    const { error } = await supabase
+    const { error, status } = await supabase
       .from(CATEGORIES)
       .insert({ color, name, profile_id });
     if (error) throw error;
 
-    Alert.alert("Category saved successfully");
+    setStatus(status);
+    handlerStates();
+    ToastAndroid.show(CATEGORY_SUCCESS, ToastAndroid.SHORT);
     closeBottomSheet();
   } catch (error) {
     console.log("Error saving category: ", error);

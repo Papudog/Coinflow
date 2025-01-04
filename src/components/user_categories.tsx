@@ -7,18 +7,20 @@ import Animated, { FadeInLeft } from "react-native-reanimated";
 import { useSheet } from "../providers/sheet_provider";
 import CategoriesSheet from "./categories_sheet";
 import { supabase } from "@/lib/supabase";
-import { useCategory } from "../providers/category_provider";
 import { Category } from "../models/categories";
 import { CATEGORIES } from "../constants/supabase";
+import { useCategory } from "../providers/category_provider";
 
 export default function UserCategories(): React.JSX.Element {
   const { openBottomSheet } = useSheet();
+  const { status } = useCategory();
   const [data, setData] = React.useState<Category[]>([]);
 
-  // Cuando se cierre el bottom sheet deberia actualizar aqui.
   useEffect((): void => {
-    getCategories().then((resolve) => setData(resolve));
-  }, []);
+    getCategories()
+      .then((resolve): void => setData(resolve))
+      .catch(console.error);
+  }, [status]);
 
   return (
     <Animated.View
@@ -86,7 +88,6 @@ function getCategories(): Promise<Category[]> {
       if (error) throw error;
       resolve(data);
     } catch (error) {
-      console.log("Error getting categories: ", error);
       reject(error);
     }
   });

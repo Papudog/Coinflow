@@ -4,6 +4,7 @@ import {
   PropsWithChildren,
   ReactNode,
   useContext,
+  useEffect,
   useRef,
   useState,
 } from "react";
@@ -25,14 +26,12 @@ export default function SheetProvider({
 
   const openBottomSheet = (node: ReactNode): void => {
     setNode(node);
-    console.log("opening");
     sheetRef.current?.snapToIndex(0);
   };
 
   const closeBottomSheet = (): void => {
-    sheetRef.current?.close();
-    console.log("closing");
     setNode(null);
+    sheetRef.current?.close();
   };
 
   return (
