@@ -1,10 +1,15 @@
+import { supabase } from "@/lib/supabase";
 import { theme } from "@/src/constants/theme";
 import { useCategory } from "@/src/providers/category_provider";
-import React, { useEffect, useState } from "react";
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { useSheet } from "@/src/providers/sheet_provider";
+import { useUser } from "@/src/providers/user_provider";
+import React from "react";
+import { Alert, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 export default function SheetButton(): React.JSX.Element {
   const { color, name, isInputNotDisabled } = useCategory();
+  const { closeBottomSheet } = useSheet();
+  const { uuid } = useUser();
 
   return (
     <View
@@ -16,19 +21,35 @@ export default function SheetButton(): React.JSX.Element {
     >
       <TouchableOpacity
         disabled={!isInputNotDisabled}
-        onPress={(): void => onSubmit(color, name)}
+        onPress={(): Promise<void> =>
+          onSubmit(color, name, uuid, closeBottomSheet)
+        }
         style={styles.touchableButton}
       >
         <Text style={{ ...styles.text, color: theme.dark }}>
-          {isInputNotDisabled ? "Save" : "Somo fields are required"}
+          {isInputNotDisabled ? "Save" : "Some fields are required"}
         </Text>
       </TouchableOpacity>
     </View>
   );
 }
 
-function onSubmit(color: string, name: string): void {
-  console.log(color, name);
+async function onSubmit(
+  color: string,
+  name: string,
+  profile_id: string,
+  closeBottomSheet: () => void
+): Promise<void> {
+  try {
+    const { error } = await supabase
+      .from("categories")
+      .insert({ color, name, profile_id });
+    if (error) throw error;
+    Alert.alert("Category saved successfully");
+    closeBottomSheet();
+  } catch (error) {
+    console.log("Error saving category: ", error);
+  }
 }
 
 const styles = StyleSheet.create({

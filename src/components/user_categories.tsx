@@ -6,6 +6,7 @@ import { FlatList, View } from "react-native";
 import Animated, { FadeInLeft } from "react-native-reanimated";
 import { useSheet } from "../providers/sheet_provider";
 import CategoriesSheet from "./categories_sheet";
+import { supabase } from "@/lib/supabase";
 
 export default function UserCategories(): React.JSX.Element {
   const { openBottomSheet } = useSheet();
@@ -100,13 +101,18 @@ export default function UserCategories(): React.JSX.Element {
           </TouchableOpacity>
         )}
       />
-
-      {/* <ModalCategories
-        modalVisible={modalVisible}
-        setModalVisible={setModalVisible}
-      /> */}
     </Animated.View>
   );
+}
+
+async function getCategories(): Promise<void> {
+  try {
+    const { data, error } = await supabase.from("categories").select("*");
+    if (error) throw error;
+    console.log("Categories: ", data);
+  } catch (error) {
+    console.log("Error getting categories: ", error);
+  }
 }
 
 const styles = StyleSheet.create({

@@ -5,11 +5,11 @@ enum CategoryStatus {
 }
 
 export interface Category {
-  id: number;
+  id?: number;
   profile_id: number;
   name: string;
-  color: string;
-  created_at: Date;
-  updated_at: Date;
+  color?: string;
+  created_at?: Date;
+  updated_at?: Date;
   status: CategoryStatus
 }

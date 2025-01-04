@@ -2,7 +2,7 @@ import { StyleSheet, Text } from "react-native";
 import { View } from "react-native";
 import { theme } from "../constants/theme";
 import SheetInput from "./ui/sheet/sheet_input";
-import ColorPicker from "./ui/color_picker";
+import ColorPicker from "./ui/sheet/color_picker";
 import SheetButton from "./ui/sheet/sheet_button";
 import CategoryProvider from "../providers/category_provider";
 
