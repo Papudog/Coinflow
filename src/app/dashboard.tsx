@@ -21,35 +21,36 @@ export default function Dashboard(): React.JSX.Element {
   }, []);
 
   return (
-    <ScrollView style={styles.container}>
-      <View style={styles.containerWrapper}>
-        <Animated.View
-          entering={FadeInLeft.delay(400).duration(400).springify()}
-          style={styles.nameApp}
-        >
-          <Image
-            source={require("../assets/images/bud_logo.png")}
-            style={{ width: 40, height: 32 }}
-          />
-          <Text
-            style={{
-              ...styles.text,
-              fontFamily: "Outfit-Bold",
-              fontSize: 32,
-            }}
+    <SheetProvider>
+      <ScrollView style={styles.container}>
+        <View style={styles.containerWrapper}>
+          <Animated.View
+            entering={FadeInLeft.delay(400).duration(400).springify()}
+            style={styles.header}
           >
-            Coinflow
-          </Text>
-        </Animated.View>
+            <Image
+              source={require("../assets/images/bud_logo.png")}
+              style={{ width: 40, height: 32 }}
+            />
+            <Text
+              style={{
+                ...styles.text,
+                fontFamily: "Outfit-Bold",
+                fontSize: 32,
+              }}
+            >
+              Coinflow
+            </Text>
+          </Animated.View>
 
-        {/* I should make a main container here lol */}
-        <SheetProvider>
-          <UserCategories />
-          <PieGraph />
-          <LatestTransactions />
-        </SheetProvider>
-      </View>
-    </ScrollView>
+          <View>
+            <UserCategories />
+            <PieGraph />
+            <LatestTransactions />
+          </View>
+        </View>
+      </ScrollView>
+    </SheetProvider>
   );
 }
 
@@ -63,12 +64,13 @@ const styles = StyleSheet.create({
     paddingVertical: 20,
     paddingHorizontal: 20,
   },
-  nameApp: {
+  header: {
     flexDirection: "row",
     alignItems: "center",
     gap: 10,
     marginVertical: 20,
   },
+
   buttonFilter: {
     flexDirection: "row",
     alignItems: "center",

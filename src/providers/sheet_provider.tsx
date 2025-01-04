@@ -25,11 +25,13 @@ export default function SheetProvider({
 
   const openBottomSheet = (node: ReactNode): void => {
     setNode(node);
+    console.log("opening");
     sheetRef.current?.snapToIndex(0);
   };
 
   const closeBottomSheet = (): void => {
     sheetRef.current?.close();
+    console.log("closing");
     setNode(null);
   };
 
@@ -37,7 +39,7 @@ export default function SheetProvider({
     <SheetContext.Provider value={{ openBottomSheet, closeBottomSheet }}>
       {children}
 
-      <Sheet ref={sheetRef}>{node}</Sheet>
+      {node && <Sheet ref={sheetRef}>{node}</Sheet>}
     </SheetContext.Provider>
   );
 }
