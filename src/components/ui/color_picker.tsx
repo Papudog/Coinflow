@@ -1,15 +1,16 @@
 import { theme } from "@/src/constants/theme";
+import { useCategory } from "@/src/providers/category_provider";
+import { useState } from "react";
 import { TouchableOpacity, View } from "react-native";
 import { FlatList } from "react-native-gesture-handler";
 
-interface ColorPickerProps {
-  setColor: (color: string) => void;
-  color?: string;
+interface ColorButtonProps {
+  color: string;
+  colorHandler: (color: string) => void;
+  isColorSelected: boolean;
 }
 
-export default function ColorPicker({
-  setColor,
-}: ColorPickerProps): React.JSX.Element {
+export default function ColorPicker(): React.JSX.Element {
   const colors: string[] = [
     "#FFFF00", // Amarillo Neón
     "#FF6600", // Naranja Neón
@@ -23,6 +24,14 @@ export default function ColorPicker({
     "#007FFF", // Azul Eléctrico
   ];
 
+  const { setColor } = useCategory();
+  const [selectedColor, setSelectedColor] = useState<string>("");
+
+  const colorHandler = (color: string): void => {
+    setColor(color);
+    setSelectedColor(color);
+  };
+
   return (
     <View style={{ width: "100%" }}>
       <View
@@ -34,7 +43,11 @@ export default function ColorPicker({
           data={colors}
           keyExtractor={(colors) => colors}
           renderItem={({ item }) => (
-            <ColorButton color={item} setColor={setColor} />
+            <ColorButton
+              color={item}
+              colorHandler={colorHandler}
+              isColorSelected={item === selectedColor}
+            />
           )}
           horizontal={true}
           showsHorizontalScrollIndicator={false}
@@ -44,16 +57,20 @@ export default function ColorPicker({
   );
 }
 
-function ColorButton({ setColor, color }: ColorPickerProps): React.JSX.Element {
+function ColorButton({
+  color,
+  colorHandler,
+  isColorSelected,
+}: ColorButtonProps): React.JSX.Element {
   return (
     <TouchableOpacity
-      onPress={(): void => setColor(color ?? "")}
+      onPress={(): void => colorHandler(color ?? "")}
       style={{
         padding: 15,
         backgroundColor: color,
         borderRadius: 20,
         borderWidth: 3,
-        borderColor: theme.medium,
+        borderColor: isColorSelected ? theme.secondary : theme.medium,
         marginHorizontal: 2,
       }}
     ></TouchableOpacity>

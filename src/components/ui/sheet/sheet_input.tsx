@@ -1,29 +1,38 @@
 import { theme } from "@/src/constants/theme";
+import { useCategory } from "@/src/providers/category_provider";
 import { FontAwesome } from "@expo/vector-icons";
 import { StyleSheet, View } from "react-native";
 import { TextInput } from "react-native-gesture-handler";
 
 interface SheetInputProps {
   placeholder: string;
-  value: string;
-  setValue: (value: string) => void;
 }
 
 export default function SheetInput({
   placeholder,
-  value,
-  setValue,
 }: SheetInputProps): React.JSX.Element {
+  const { name, setName, isInputNotDisabled } = useCategory();
+
   return (
     <View style={{ width: "100%" }}>
       <View style={styles.inputContainer}>
-        <View style={styles.iconContainer}>
-          <FontAwesome name="pencil" size={16} color={theme.high_medium} />
+        <View
+          style={
+            !isInputNotDisabled
+              ? styles.iconContainer
+              : { ...styles.iconContainer, backgroundColor: theme.secondary }
+          }
+        >
+          <FontAwesome
+            name="pencil"
+            size={16}
+            color={!isInputNotDisabled ? theme.high_medium : theme.dark}
+          />
         </View>
         <TextInput
           placeholder={placeholder}
-          value={value}
-          onChangeText={(text): void => setValue(text)}
+          value={name}
+          onChangeText={(text): void => setName(text)}
           style={{
             paddingHorizontal: 10,
             color: theme.dark,
