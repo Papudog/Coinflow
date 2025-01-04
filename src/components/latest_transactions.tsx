@@ -5,6 +5,7 @@ import { theme } from "@/src/constants/theme";
 import { FontAwesome } from "@expo/vector-icons";
 import Animated, { FadeInLeft } from "react-native-reanimated";
 import { TouchableOpacity } from "react-native";
+import { router } from "expo-router";
 
 export default function LatestTransactions(): React.JSX.Element {
   const transactions = [
@@ -82,6 +83,7 @@ export default function LatestTransactions(): React.JSX.Element {
             borderWidth: 0,
             backgroundColor: "transparent",
           }}
+          onPress={(): void => router.push("/add_transaction")}
         >
           <FontAwesome name="plus" size={16} color={theme.secondary} />
           <Text
