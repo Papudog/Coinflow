@@ -1,5 +1,5 @@
-import ButtonSubmit from "@/src/components/button_submit";
-import CustomInput from "@/src/components/custom_input";
+import ButtonSubmit from "@/src/components/ui/button_submit";
+import CustomInput from "@/src/components/ui/custom_input";
 import { theme } from "@/src/constants/theme";
 import useEmail from "@/src/hooks/useEmail";
 import usePassword from "@/src/hooks/usePassword";

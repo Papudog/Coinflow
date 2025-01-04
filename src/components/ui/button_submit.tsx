@@ -1,7 +1,7 @@
 import { theme } from "@/src/constants/theme";
 import React from "react";
 import { StyleSheet } from "react-native";
-import { Text, TouchableOpacity, View } from "react-native";
+import { TouchableOpacity, View } from "react-native";
 
 interface ButtonSubmitProps {
   onPress: () => void;

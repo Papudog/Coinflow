@@ -1,6 +1,6 @@
 import React from "react";
-import Card from "./card";
-import { FlatList, ScrollView, StyleSheet, Text, View } from "react-native";
+import Card from "./ui/card";
+import { FlatList, StyleSheet, Text, View } from "react-native";
 import { theme } from "@/src/constants/theme";
 import { FontAwesome } from "@expo/vector-icons";
 import Animated, { FadeInLeft } from "react-native-reanimated";

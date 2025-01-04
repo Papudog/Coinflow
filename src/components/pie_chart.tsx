@@ -1,14 +1,11 @@
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { BlurView } from "expo-blur";
 import { theme } from "@/src/constants/theme";
-import Card from "./card";
+import Card from "./ui/card";
 import { PieChart } from "react-native-gifted-charts";
 import { FontAwesome } from "@expo/vector-icons";
 import React from "react";
-import Animated, {
-  FadeInLeft,
-  FadingTransition,
-} from "react-native-reanimated";
+import Animated, { FadeInLeft } from "react-native-reanimated";
 
 export default function PieGraph(): React.JSX.Element {
   const pieData = [

@@ -2,10 +2,24 @@ import LatestTransactions from "@/src/components/latest_transactions";
 import PieGraph from "@/src/components/pie_chart";
 import UserCategories from "@/src/components/user_categories";
 import { theme } from "@/src/constants/theme";
+import { useEffect } from "react";
 import { Image, ScrollView, StyleSheet, Text, View } from "react-native";
 import Animated, { FadeInLeft } from "react-native-reanimated";
+import { useUser } from "../providers/user_provider";
+import { supabase } from "@/lib/supabase";
+import SheetProvider from "../providers/sheet_provider";
 
 export default function Dashboard(): React.JSX.Element {
+  const { setUuid } = useUser();
+
+  useEffect((): void => {
+    const getUserAuth = async (): Promise<void> => {
+      const { data } = await supabase.auth.getUser();
+      if (data) setUuid(data.user!.id);
+    };
+    getUserAuth();
+  }, []);
+
   return (
     <ScrollView style={styles.container}>
       <View style={styles.containerWrapper}>
@@ -27,9 +41,13 @@ export default function Dashboard(): React.JSX.Element {
             Coinflow
           </Text>
         </Animated.View>
-        <UserCategories />
-        <PieGraph />
-        <LatestTransactions />
+
+        {/* I should make a main container here lol */}
+        <SheetProvider>
+          <UserCategories />
+          <PieGraph />
+          <LatestTransactions />
+        </SheetProvider>
       </View>
     </ScrollView>
   );

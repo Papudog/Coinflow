@@ -1,8 +1,10 @@
 import { useFonts } from "expo-font";
 import * as SplashScreen from "expo-splash-screen";
-import { router, Router, Stack, useRouter } from "expo-router";
+import { router, Stack } from "expo-router";
 import React, { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
+import UserProvider from "../providers/user_provider";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -25,8 +27,9 @@ export default function RootLayout(): React.JSX.Element | null {
           data: { session },
         } = await supabase.auth.getSession();
 
-        if (session) router.push("/dashboard");
-        else router.push("/");
+        if (session) {
+          router.push("/dashboard");
+        } else router.push("/");
       } catch (err) {
         console.error(err);
       } finally {
@@ -43,15 +46,18 @@ export default function RootLayout(): React.JSX.Element | null {
   }
 
   return (
-    <Stack
-      screenOptions={{
-        headerShown: false,
-      }}
-    >
-      {/* <Stack.Screen name="index" /> */}
-      <Stack.Screen name="index" options={{ title: "Login" }} />
-      <Stack.Screen name="signup" options={{ title: "Sign Up" }} />
-      <Stack.Screen name="dashboard" options={{ title: "Dashboard" }} />
-    </Stack>
+    <GestureHandlerRootView>
+      <UserProvider>
+        <Stack
+          screenOptions={{
+            headerShown: false,
+          }}
+        >
+          <Stack.Screen name="index" options={{ title: "Login" }} />
+          <Stack.Screen name="signup" options={{ title: "Sign Up" }} />
+          <Stack.Screen name="dashboard" options={{ title: "Dashboard" }} />
+        </Stack>
+      </UserProvider>
+    </GestureHandlerRootView>
   );
 }

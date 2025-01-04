@@ -1,13 +1,14 @@
 import { theme } from "@/src/constants/theme";
 import { FontAwesome } from "@expo/vector-icons";
 import React from "react";
-import { Modal, StyleSheet, Text, TouchableOpacity } from "react-native";
+import { StyleSheet, Text, TouchableOpacity } from "react-native";
 import { FlatList, View } from "react-native";
 import Animated, { FadeInLeft } from "react-native-reanimated";
-import ModalCategories from "./modal_categories";
+import { useSheet } from "../providers/sheet_provider";
+import CategoriesSheet from "./categories_sheet";
 
 export default function UserCategories(): React.JSX.Element {
-  const [modalVisible, setModalVisible] = React.useState(false);
+  const { openBottomSheet } = useSheet();
 
   const data = [
     {
@@ -68,7 +69,7 @@ export default function UserCategories(): React.JSX.Element {
             borderWidth: 0,
             backgroundColor: "transparent",
           }}
-          onPress={(): void => setModalVisible(true)}
+          onPress={(): void => openBottomSheet(<CategoriesSheet />)}
         >
           <FontAwesome name="plus" size={16} color={theme.secondary} />
           <Text
@@ -100,10 +101,10 @@ export default function UserCategories(): React.JSX.Element {
         )}
       />
 
-      <ModalCategories
+      {/* <ModalCategories
         modalVisible={modalVisible}
         setModalVisible={setModalVisible}
-      />
+      /> */}
     </Animated.View>
   );
 }
