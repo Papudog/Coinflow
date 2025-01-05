@@ -10,7 +10,7 @@ export default function ExpenseSection(): React.JSX.Element {
       <View style={styles.expenseContainer}>
         {/* Expense Section */}
         <View style={styles.expenseWrapper}>
-          <View style={{ width: "50%" }}>
+          <View style={{ flex: 1 }}>
             <View style={{ marginBottom: 5 }}>
               <Text style={{ ...styles.text_tertiary, fontSize: 24 }}>
                 My expenses
@@ -25,9 +25,6 @@ export default function ExpenseSection(): React.JSX.Element {
           </View>
           {/* Pie Graph */}
           <PieGraph />
-        </View>
-        <View style={{ marginVertical: 30 }}>
-          <TransactionList />
         </View>
       </View>
     </Animated.View>

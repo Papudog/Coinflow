@@ -1,4 +1,3 @@
-import UserCategories from "@/src/components/categories/categories_list";
 import { theme } from "@/src/constants/theme";
 import { useEffect } from "react";
 import { Image, ScrollView, StyleSheet, Text, View } from "react-native";
@@ -6,6 +5,9 @@ import Animated, { FadeInLeft } from "react-native-reanimated";
 import { supabase } from "@/lib/supabase";
 import ExpenseSection from "@/src/components/expense/expense_section";
 import { useUser } from "@/src/providers/user_provider";
+import TransactionList from "@/src/components/expense/expense_list";
+import Switch from "@/src/components/ui/switch";
+import CategoriesList from "@/src/components/categories/categories_list";
 
 export default function Dashboard(): React.JSX.Element {
   const { setUuid } = useUser();
@@ -41,8 +43,12 @@ export default function Dashboard(): React.JSX.Element {
         </Animated.View>
 
         <View>
-          <UserCategories />
+          <CategoriesList />
           <ExpenseSection />
+          <View style={{ marginVertical: 20 }}>
+            <Switch />
+          </View>
+          <TransactionList />
         </View>
       </View>
     </ScrollView>

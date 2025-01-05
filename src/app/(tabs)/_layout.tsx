@@ -1,9 +1,6 @@
-import TabBar from "@/src/components/tab_bar";
-import { theme } from "@/src/constants/theme";
-import { FontAwesome } from "@expo/vector-icons";
+import TabBar from "@/src/components/ui/tab_bar";
 import { BottomTabBarProps } from "@react-navigation/bottom-tabs";
 import { Tabs } from "expo-router";
-import { View } from "react-native";
 
 export default function TabsLayout(): React.JSX.Element {
   return (

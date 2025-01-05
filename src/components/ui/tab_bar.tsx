@@ -1,8 +1,8 @@
 import { View, TouchableOpacity, Text, StyleSheet } from "react-native";
-import { theme } from "../constants/theme";
 import { BottomTabBarProps } from "@react-navigation/bottom-tabs";
 import { FontAwesome } from "@expo/vector-icons";
 import React from "react";
+import { theme } from "@/src/constants/theme";
 
 interface IconProps {
   color: string;

@@ -18,22 +18,24 @@ export default function PieGraph(): React.JSX.Element {
   ];
 
   return (
-    <PieChart
-      data={pieData}
-      donut
-      showGradient
-      sectionAutoFocus
-      radius={70}
-      focusOnPress={true}
-      semiCircle={true}
-      innerRadius={55}
-      innerCircleColor={theme.dark}
-      centerLabelComponent={(): React.JSX.Element => (
-        <View style={{ alignItems: "center", justifyContent: "center" }}>
-          <Text style={{ ...styles.text, fontSize: 20 }}>40%</Text>
-        </View>
-      )}
-    />
+    <View style={{ flex: 1 }}>
+      <PieChart
+        data={pieData}
+        donut
+        showGradient
+        sectionAutoFocus
+        radius={70}
+        focusOnPress={true}
+        semiCircle={true}
+        innerRadius={55}
+        innerCircleColor={theme.dark}
+        centerLabelComponent={(): React.JSX.Element => (
+          <View style={{ alignItems: "center", justifyContent: "center" }}>
+            <Text style={{ ...styles.text, fontSize: 20 }}>40%</Text>
+          </View>
+        )}
+      />
+    </View>
   );
 }
 
@@ -41,7 +43,7 @@ const styles = StyleSheet.create({
   chartContainer: {
     borderBottomColor: theme.high_medium,
     backgroundColor: theme.dark,
-    width: "100%",
+    flex: 1,
     marginVertical: 10,
   },
   chartWrapper: {
@@ -60,21 +62,3 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
 });
-
-{
-  /* <PieChart
-            data={pieData}
-            donut
-            showGradient
-            sectionAutoFocus
-            radius={90}
-            innerRadius={60}
-            innerCircleColor={"#1A1A3F"}
-            centerLabelComponent={(): React.JSX.Element => (
-              <View style={{ alignItems: "center" }}>
-                <Text style={styles.text}>Amount</Text>
-                <Text style={{ ...styles.text, fontSize: 20 }}>200$</Text>
-              </View>
-            )}
-          /> */
-}

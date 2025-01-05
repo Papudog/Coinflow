@@ -1,27 +1,6 @@
-import {
-  createContext,
-  PropsWithChildren,
-  useContext,
-  useEffect,
-  useState,
-} from "react";
+import { PropsWithChildren, useEffect, useState } from "react";
 import { Category } from "../models/categories";
-
-interface CategoryContextProps {
-  name: string;
-  color: string;
-  isInputNotDisabled: boolean;
-  status: number;
-  categories: Category[];
-  setName: (name: string) => void;
-  setColor: (color: string) => void;
-  setStatus: (status: number) => void;
-  setCategories: (categories: Category[]) => void;
-}
-
-const CategoryContext = createContext<CategoryContextProps>(
-  {} as CategoryContextProps
-);
+import { CategoryContext } from "../context/category_context";
 
 export default function CategoryProvider({
   children,
@@ -31,8 +10,8 @@ export default function CategoryProvider({
   const [status, setStatus] = useState<number>(0);
 
   const [categories, setCategories] = useState<Category[]>([]);
-
   const [isInputNotDisabled, setIsInputNotDisabled] = useState<boolean>(false);
+  const [category, setCategory] = useState<Category>({} as Category);
 
   useEffect((): void => {
     const isNotDisabled: boolean = color !== "" && name !== ""; // True
@@ -51,12 +30,11 @@ export default function CategoryProvider({
         setStatus,
         categories,
         setCategories,
+        category,
+        setCategory,
       }}
     >
       {children}
     </CategoryContext.Provider>
   );
 }
-
-export const useCategory = (): CategoryContextProps =>
-  useContext(CategoryContext);

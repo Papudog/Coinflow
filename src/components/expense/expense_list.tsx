@@ -99,22 +99,13 @@ export default function TransactionList(): React.JSX.Element {
   };
 
   return (
-    <View style={{ gap: 10 }}>
-      <TouchableOpacity>
-        <View style={styles.buttonFilter}>
-          <FontAwesome name="filter" size={16} color={theme.secondary} />
-          <Text style={{ ...styles.text, color: theme.secondary }}>Filter</Text>
-        </View>
-      </TouchableOpacity>
-
-      <FlatList
-        data={transactions}
-        keyExtractor={(transactions) => transactions.id.toString()}
-        showsHorizontalScrollIndicator={false}
-        scrollEnabled={false}
-        renderItem={renderTransactions}
-      />
-    </View>
+    <FlatList
+      data={transactions}
+      keyExtractor={(transactions) => transactions.id.toString()}
+      showsHorizontalScrollIndicator={false}
+      scrollEnabled={false}
+      renderItem={renderTransactions}
+    />
   );
 }
 const styles = StyleSheet.create({

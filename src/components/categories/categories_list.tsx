@@ -13,10 +13,10 @@ import CategoriesSheet from "./categories_sheet";
 import { supabase } from "@/lib/supabase";
 import { Category } from "../../models/categories";
 import { CATEGORIES } from "../../constants/supabase";
-import { useCategory } from "../../providers/category_provider";
 import { useSheet } from "@/src/context/sheet_context";
+import { useCategory } from "@/src/context/category_context";
 
-export default function UserCategories(): React.JSX.Element {
+export default function CategoriesList(): React.JSX.Element {
   const { openBottomSheet } = useSheet();
   const { status, setCategories } = useCategory();
   const [data, setData] = useState<Category[]>([]);

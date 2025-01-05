@@ -5,13 +5,13 @@ enum TransactionStatus {
 }
 
 export interface Transaction {
-  id: number;
+  id?: number;
   profile_id: number;
   category_id: number;
   amount: number;
   type: 'Income' | 'Expense';
-  note: string;
-  status: TransactionStatus;
-  created_at: Date;
-  updated_at: Date;
+  note?: string;
+  status?: TransactionStatus;
+  created_at?: Date;
+  updated_at?: Date;
 }
