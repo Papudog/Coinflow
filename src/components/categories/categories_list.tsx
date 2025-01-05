@@ -1,15 +1,20 @@
 import { theme } from "@/src/constants/theme";
 import { FontAwesome } from "@expo/vector-icons";
 import React, { useEffect, useState } from "react";
-import { StyleSheet, Text, TouchableOpacity } from "react-native";
+import {
+  ListRenderItem,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+} from "react-native";
 import { FlatList, View } from "react-native";
 import Animated, { FadeInLeft } from "react-native-reanimated";
-import { useSheet } from "../../providers/sheet_provider";
 import CategoriesSheet from "./categories_sheet";
 import { supabase } from "@/lib/supabase";
 import { Category } from "../../models/categories";
 import { CATEGORIES } from "../../constants/supabase";
 import { useCategory } from "../../providers/category_provider";
+import { useSheet } from "@/src/context/sheet_context";
 
 export default function UserCategories(): React.JSX.Element {
   const { openBottomSheet } = useSheet();
@@ -24,6 +29,26 @@ export default function UserCategories(): React.JSX.Element {
       })
       .catch(console.error);
   }, [status]);
+
+  const renderItem: ListRenderItem<Category> = ({
+    item,
+  }): React.JSX.Element => {
+    return (
+      <TouchableOpacity
+        style={{
+          ...styles.buttonFilter,
+          borderColor: item.color,
+          marginHorizontal: 3,
+        }}
+      >
+        <View>
+          <Text style={{ ...styles.text, color: item.color, fontSize: 14 }}>
+            {item.name}
+          </Text>
+        </View>
+      </TouchableOpacity>
+    );
+  };
 
   return (
     <Animated.View
@@ -64,21 +89,8 @@ export default function UserCategories(): React.JSX.Element {
         data={data}
         keyExtractor={(data: Category) => data && data.id.toString()}
         horizontal={true}
-        renderItem={({ item }) => (
-          <TouchableOpacity
-            style={{
-              ...styles.buttonFilter,
-              borderColor: item.color,
-              marginHorizontal: 3,
-            }}
-          >
-            <View>
-              <Text style={{ ...styles.text, color: item.color, fontSize: 14 }}>
-                {item.name}
-              </Text>
-            </View>
-          </TouchableOpacity>
-        )}
+        renderItem={renderItem}
+        showsHorizontalScrollIndicator={false}
       />
     </Animated.View>
   );

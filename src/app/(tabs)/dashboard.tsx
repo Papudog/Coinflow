@@ -3,9 +3,9 @@ import { theme } from "@/src/constants/theme";
 import { useEffect } from "react";
 import { Image, ScrollView, StyleSheet, Text, View } from "react-native";
 import Animated, { FadeInLeft } from "react-native-reanimated";
-import { useUser } from "../providers/user_provider";
 import { supabase } from "@/lib/supabase";
-import ExpenseSection from "../components/expense/expense_section";
+import ExpenseSection from "@/src/components/expense/expense_section";
+import { useUser } from "@/src/providers/user_provider";
 
 export default function Dashboard(): React.JSX.Element {
   const { setUuid } = useUser();
@@ -26,7 +26,7 @@ export default function Dashboard(): React.JSX.Element {
           style={styles.header}
         >
           <Image
-            source={require("../assets/images/bud_logo.png")}
+            source={require("../../assets/images/bud_logo.png")}
             style={{ width: 40, height: 32 }}
           />
           <Text

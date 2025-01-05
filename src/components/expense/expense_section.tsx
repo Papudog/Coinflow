@@ -11,10 +11,17 @@ export default function ExpenseSection(): React.JSX.Element {
         {/* Expense Section */}
         <View style={styles.expenseWrapper}>
           <View style={{ width: "50%" }}>
-            <Text style={{ ...styles.text_tertiary, fontSize: 24 }}>
-              My expenses
+            <View style={{ marginBottom: 5 }}>
+              <Text style={{ ...styles.text_tertiary, fontSize: 24 }}>
+                My expenses
+              </Text>
+              <Text style={{ ...styles.text, fontSize: 12 }}>
+                Weekly summary
+              </Text>
+            </View>
+            <Text style={{ ...styles.text, fontSize: 22 }}>
+              $ 1400.<Text style={{ fontSize: 18 }}>00</Text>
             </Text>
-            <Text style={{ ...styles.text, fontSize: 20 }}>$ 1400</Text>
           </View>
           {/* Pie Graph */}
           <PieGraph />

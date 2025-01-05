@@ -34,7 +34,7 @@ export default function Login(): React.JSX.Element {
     });
 
     if (error) Alert.alert(error.message);
-    else router.push({ pathname: "/dashboard" });
+    else router.push({ pathname: "/(tabs)/dashboard" });
   };
 
   return (

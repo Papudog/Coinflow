@@ -3,10 +3,8 @@ import * as SplashScreen from "expo-splash-screen";
 import { router, Stack } from "expo-router";
 import React, { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
-import UserProvider from "../providers/user_provider";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
-import SheetProvider from "../providers/sheet_provider";
-import CategoryProvider from "../providers/category_provider";
+
 import AppProviders from "../providers/app_providers";
 
 SplashScreen.preventAutoHideAsync();
@@ -18,6 +16,7 @@ export default function RootLayout(): React.JSX.Element | null {
   });
 
   const [isScreenReady, setIsScreenReady] = useState(false);
+  const [initialRouteChecked, setInitialRouteChecked] = useState(false);
 
   useEffect(() => {
     const initializeApp = async () => {
@@ -31,12 +30,13 @@ export default function RootLayout(): React.JSX.Element | null {
         } = await supabase.auth.getSession();
 
         if (session) {
-          router.push("/dashboard");
-        } else router.push("/");
+          router.replace("/(tabs)/dashboard");
+        } else router.replace("/");
       } catch (err) {
         console.error(err);
       } finally {
         setIsScreenReady(true);
+        setInitialRouteChecked(true);
         await SplashScreen.hideAsync();
       }
     };
@@ -44,7 +44,7 @@ export default function RootLayout(): React.JSX.Element | null {
     initializeApp();
   }, [loaded, error]);
 
-  if (!isScreenReady) {
+  if (!isScreenReady || !initialRouteChecked) {
     return null;
   }
 
@@ -58,7 +58,7 @@ export default function RootLayout(): React.JSX.Element | null {
         >
           <Stack.Screen name="index" options={{ title: "Login" }} />
           <Stack.Screen name="signup" options={{ title: "Sign Up" }} />
-          <Stack.Screen name="dashboard" options={{ title: "Dashboard" }} />
+          <Stack.Screen name="(tabs)" />
         </Stack>
       </AppProviders>
     </GestureHandlerRootView>

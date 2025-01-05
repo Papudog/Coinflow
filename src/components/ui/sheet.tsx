@@ -1,5 +1,5 @@
 import { theme } from "@/src/constants/theme";
-import { useSheet } from "@/src/providers/sheet_provider";
+import { useSheet } from "@/src/context/sheet_context";
 import BottomSheet, { BottomSheetView } from "@gorhom/bottom-sheet";
 import React, { forwardRef, ReactNode } from "react";
 import { StyleSheet } from "react-native";

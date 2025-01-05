@@ -1,8 +1,8 @@
 import React from "react";
 import { StyleSheet, TouchableOpacity } from "react-native";
 import { Text, View } from "react-native";
-import { theme } from "../constants/theme";
 import { router } from "expo-router";
+import { theme } from "@/src/constants/theme";
 
 export default function AddTransaction(): React.JSX.Element {
   return (
@@ -12,9 +12,7 @@ export default function AddTransaction(): React.JSX.Element {
           <Text style={{ ...styles.text, fontSize: 24, marginVertical: 20 }}>
             Add a transaction
           </Text>
-          <TouchableOpacity
-            onPress={() => router.push("/dashboard")}
-          ></TouchableOpacity>
+          <TouchableOpacity onPress={() => router.push("/")}></TouchableOpacity>
         </View>
       </View>
     </View>

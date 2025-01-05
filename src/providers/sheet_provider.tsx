@@ -8,13 +8,7 @@ import {
   useState,
 } from "react";
 import Sheet from "../components/ui/sheet";
-
-interface SheetProps {
-  openBottomSheet: (node: ReactNode) => void;
-  closeBottomSheet: () => void;
-}
-
-const SheetContext = createContext<SheetProps>({} as SheetProps);
+import SheetContext from "../context/sheet_context";
 
 export default function SheetProvider({
   children,
@@ -41,5 +35,3 @@ export default function SheetProvider({
     </SheetContext.Provider>
   );
 }
-
-export const useSheet = (): SheetProps => useContext(SheetContext);
