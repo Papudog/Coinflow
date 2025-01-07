@@ -1,9 +1,21 @@
 import { theme } from "@/src/constants/theme";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
-export default function Switch() {
-  const [isActive, setIsActive] = useState(false);
+interface SwitchProps {
+  value: string;
+  setValue: (value: "Expense" | "Income") => void;
+}
+
+export default function Switch({
+  value,
+  setValue,
+}: SwitchProps): React.JSX.Element {
+  const [isActive, setIsActive] = useState<boolean>(false);
+
+  useEffect((): void => {
+    !isActive ? setValue("Expense") : setValue("Income");
+  }, [isActive]);
 
   return (
     <View style={styles.switchContainer}>

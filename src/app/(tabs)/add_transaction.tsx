@@ -1,27 +1,53 @@
 import React, { useEffect, useState } from "react";
-import { StyleSheet, TextInput, TouchableOpacity } from "react-native";
+import { StyleSheet, TouchableOpacity } from "react-native";
 import { Text, View } from "react-native";
-import { router } from "expo-router";
 import { theme } from "@/src/constants/theme";
-import { Category } from "@/src/models/categories";
 import CategoriesModal from "@/src/components/categories/categories_modal";
 import ExpenseInput from "@/src/components/expense/add/expense_input";
-import { useCategory } from "@/src/context/category_context";
 import { FontAwesome } from "@expo/vector-icons";
 import Switch from "@/src/components/ui/switch";
+import { useCategory } from "@/src/context/category_context";
+
+interface FormValues {
+  type: string;
+  amount: string;
+  name: string;
+  note: string;
+  categoryName: string;
+}
 
 export default function AddTransaction(): React.JSX.Element {
+  // Modal state
   const [isVisible, setIsVisible] = useState<boolean>(false);
-
-  const [category, setCategory] = useState<string>("");
-  const [type, setType] = useState<string>("");
+  const { category } = useCategory();
+  // Form states
+  const [type, setType] = useState<string>("Expense");
   const [amount, setAmount] = useState<string>("");
   const [name, setName] = useState<string>("");
   const [note, setNote] = useState<string>("");
+  const [categoryName, setCategoryName] = useState<string>("");
+
+  useEffect(() => {
+    setCategoryName(category?.name || "");
+  }, [category]);
+
+  // Functions
+  const onSubmit = (): void => {
+    const formValues: FormValues = {
+      type,
+      amount,
+      name,
+      note,
+      categoryName,
+    };
+
+    console.log(formValues);
+  };
 
   return (
     <View style={styles.container}>
       <View style={styles.containerWrapper}>
+        {/* Heading */}
         <View>
           <Text
             style={{
@@ -34,9 +60,10 @@ export default function AddTransaction(): React.JSX.Element {
             Type of transaction
           </Text>
 
-          <Switch />
+          <Switch value={type} setValue={setType} />
         </View>
 
+        {/* Form */}
         <View style={{ marginVertical: 20, gap: 20 }}>
           <ExpenseInput
             value={amount}
@@ -55,11 +82,7 @@ export default function AddTransaction(): React.JSX.Element {
           </ExpenseInput>
 
           <View>
-            <ExpenseInput
-              value={category}
-              setValue={setCategory}
-              placeholder="Category"
-            >
+            <ExpenseInput value={categoryName} placeholder="Category">
               <FontAwesome name="bars" size={16} color={theme.light} />
             </ExpenseInput>
             <TouchableOpacity
@@ -78,12 +101,14 @@ export default function AddTransaction(): React.JSX.Element {
             </TouchableOpacity>
           </View>
 
+          {/* Submit button */}
           <TouchableOpacity
             style={{
               ...styles.buttonModal,
               backgroundColor: theme.primary,
               borderColor: theme.dark,
             }}
+            onPress={(): void => onSubmit()}
           >
             <View
               style={{
@@ -98,10 +123,13 @@ export default function AddTransaction(): React.JSX.Element {
         </View>
       </View>
 
+      {/* Hid modal */}
       <CategoriesModal setIsVisible={setIsVisible} isVisible={isVisible} />
     </View>
   );
 }
+
+function showData() {}
 
 const styles = StyleSheet.create({
   container: {

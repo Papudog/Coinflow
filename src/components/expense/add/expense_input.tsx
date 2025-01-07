@@ -1,6 +1,5 @@
 import { theme } from "@/src/constants/theme";
-import { FontAwesome } from "@expo/vector-icons";
-import { ReactNode, useState } from "react";
+import { ReactNode } from "react";
 import { Text } from "react-native";
 import { StyleSheet, View } from "react-native";
 import { TextInput } from "react-native-gesture-handler";
@@ -8,7 +7,7 @@ import { TextInput } from "react-native-gesture-handler";
 interface ExpenseInputProps {
   placeholder: string;
   value: string;
-  setValue: (value: string) => void;
+  setValue?: (value: string) => void;
   children?: ReactNode;
 }
 
@@ -34,7 +33,8 @@ export default function ExpenseInput({
           <TextInput
             placeholder={placeholder}
             value={value}
-            onChangeText={(text): void => setValue(text)}
+            readOnly={setValue ? false : true}
+            onChangeText={(text): void => setValue && setValue(text)}
             placeholderTextColor={theme.light}
             style={styles.text}
           />

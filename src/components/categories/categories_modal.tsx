@@ -22,21 +22,18 @@ export default function CategoriesModal({
   isVisible,
   setIsVisible,
 }: CategoriesModalProps): React.JSX.Element {
-  const { categories } = useCategory();
+  const { categories, category, setCategory } = useCategory();
   const [data, setData] = useState<Category[]>([]);
 
+  // Categories fetched from the context
   useEffect((): void => {
     setData(categories);
   }, [categories]);
 
-  const [selectedCategory, setSelectedCategory] = useState<Category | null>(
-    null
-  );
-
   const renderItem: ListRenderItem<Category> = ({
     item,
   }): React.JSX.Element => {
-    const isSelected: boolean = selectedCategory?.id === item.id;
+    const isSelected: boolean = category?.id === item.id;
 
     return (
       <View style={{ flex: 1 }}>
@@ -52,7 +49,7 @@ export default function CategoriesModal({
             width: "100%",
           }}
           onPress={(): void => {
-            setSelectedCategory(item);
+            setCategory(item);
           }}
         >
           <View style={{ flex: 1, justifyContent: "center" }}>
@@ -76,7 +73,7 @@ export default function CategoriesModal({
                 borderRadius: 10,
               }}
               onPress={(): void => {
-                setSelectedCategory(item);
+                setCategory(item);
               }}
             ></TouchableOpacity>
           </View>

@@ -1,5 +1,5 @@
 import { theme } from "@/src/constants/theme";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Image, ScrollView, StyleSheet, Text, View } from "react-native";
 import Animated, { FadeInLeft } from "react-native-reanimated";
 import { supabase } from "@/lib/supabase";
@@ -11,6 +11,7 @@ import CategoriesList from "@/src/components/categories/categories_list";
 
 export default function Dashboard(): React.JSX.Element {
   const { setUuid } = useUser();
+  const [type, setType] = useState<string>("Expense");
 
   useEffect((): void => {
     const getUserAuth = async (): Promise<void> => {
@@ -46,7 +47,7 @@ export default function Dashboard(): React.JSX.Element {
           <CategoriesList />
           <ExpenseSection />
           <View style={{ marginVertical: 20 }}>
-            <Switch />
+            <Switch value={type} setValue={setType} />
           </View>
           <TransactionList />
         </View>

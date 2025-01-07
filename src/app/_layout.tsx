@@ -1,7 +1,7 @@
 import { useFonts } from "expo-font";
 import * as SplashScreen from "expo-splash-screen";
-import { router, Stack } from "expo-router";
-import React, { useEffect, useState } from "react";
+import { router, Slot, Stack } from "expo-router";
+import React, { useCallback, useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 
@@ -10,42 +10,42 @@ import AppProviders from "../providers/app_providers";
 SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout(): React.JSX.Element | null {
-  const [loaded, error] = useFonts({
+  const [fontsLoaded] = useFonts({
     "Outfit-Regular": require("../assets/fonts/Outfit-Regular.ttf"),
     "Outfit-Bold": require("../assets/fonts/Outfit-Bold.ttf"),
   });
 
-  const [isScreenReady, setIsScreenReady] = useState(false);
-  const [initialRouteChecked, setInitialRouteChecked] = useState(false);
+  const [isSessionChecked, setIsSessionChecked] = useState<boolean>(false);
 
-  useEffect(() => {
-    const initializeApp = async () => {
-      try {
-        if (!loaded && !error) {
-          return;
-        }
+  const onInit = useCallback(async () => {
+    try {
+      if (!fontsLoaded) return;
 
-        const {
-          data: { session },
-        } = await supabase.auth.getSession();
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
 
-        if (session) {
-          router.replace("/(tabs)/dashboard");
-        } else router.replace("/");
-      } catch (err) {
-        console.error(err);
-      } finally {
-        setIsScreenReady(true);
-        setInitialRouteChecked(true);
-        await SplashScreen.hideAsync();
-      }
-    };
+      session ? router.replace("/(tabs)/dashboard") : router.replace("/");
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setIsSessionChecked(true);
+      await SplashScreen.hideAsync();
+    }
+  }, [fontsLoaded]);
 
-    initializeApp();
-  }, [loaded, error]);
+  useEffect((): void => {
+    onInit();
+  }, [onInit]);
 
-  if (!isScreenReady || !initialRouteChecked) {
-    return null;
+  if (!fontsLoaded || !isSessionChecked) {
+    return (
+      <GestureHandlerRootView>
+        <AppProviders>
+          <Slot />
+        </AppProviders>
+      </GestureHandlerRootView>
+    );
   }
 
   return (
