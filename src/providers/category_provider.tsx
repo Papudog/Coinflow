@@ -11,7 +11,7 @@ export default function CategoryProvider({
 
   const [categories, setCategories] = useState<Category[]>([]);
   const [isInputNotDisabled, setIsInputNotDisabled] = useState<boolean>(false);
-  const [category, setCategory] = useState<Category>({} as Category);
+  const [category, setCategory] = useState<Category | null>(null);
 
   useEffect((): void => {
     const isNotDisabled: boolean = color !== "" && name !== ""; // True

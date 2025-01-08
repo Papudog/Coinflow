@@ -6,7 +6,7 @@ enum TransactionStatus {
 
 export interface Transaction {
   id?: number;
-  profile_id: number;
+  profile_id: string;
   category_id: number;
   amount: number;
   type: 'Income' | 'Expense';

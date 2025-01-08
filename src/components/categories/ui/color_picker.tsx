@@ -1,5 +1,5 @@
 import { theme } from "@/src/constants/theme";
-import { useCategory } from "@/src/providers/category_provider";
+import { useCategory } from "@/src/context/category_context";
 import { useState } from "react";
 import { TouchableOpacity, View } from "react-native";
 import { FlatList } from "react-native-gesture-handler";

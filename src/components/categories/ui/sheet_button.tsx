@@ -1,50 +1,54 @@
-import { supabase } from "@/lib/supabase";
-import { CATEGORIES, CATEGORY_SUCCESS } from "@/src/constants/supabase";
+import { CATEGORY_FAILED, CATEGORY_SUCCESS, FIELDS_REQUIRED } from "@/src/constants/supabase";
 import { theme } from "@/src/constants/theme";
+import { useCategory } from "@/src/context/category_context";
 import { useSheet } from "@/src/context/sheet_context";
-import { useCategory } from "@/src/providers/category_provider";
 import { useUser } from "@/src/providers/user_provider";
+import { addCategory } from "@/src/services/category-service";
 import React from "react";
-import {
-  StyleSheet,
-  Text,
-  ToastAndroid,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { StyleSheet, Text, ToastAndroid, TouchableOpacity, View } from "react-native";
 
 export default function SheetButton(): React.JSX.Element {
+  // Context
   const { color, name, setName, setColor, isInputNotDisabled, setStatus } =
     useCategory();
   const { closeBottomSheet } = useSheet();
   const { uuid } = useUser();
 
-  const handlerStates = (): void => {
+  // Functions
+  const statesHandler = (): void => {
     setName("");
     setColor("");
     setStatus(0);
   };
 
-  return (
-    <View
-      style={
-        isInputNotDisabled
-          ? styles.buttonContainer
-          : { ...styles.buttonContainer, backgroundColor: theme.high_medium }
+  const onSubmit = async (): Promise<void> => {
+    try {
+      if (!color || !name) {
+        ToastAndroid.show(FIELDS_REQUIRED, ToastAndroid.SHORT);
+        return;
       }
-    >
+
+      const categoryStatus: number =
+        await addCategory({ color, name, profile_id: uuid })
+
+      setStatus(categoryStatus);
+      statesHandler();
+
+      ToastAndroid.show(CATEGORY_SUCCESS, ToastAndroid.SHORT);
+      closeBottomSheet();
+    } catch (error) {
+      ToastAndroid.show(CATEGORY_FAILED, ToastAndroid.SHORT);
+    }
+  }
+
+  return (
+    <View style={isInputNotDisabled
+      ? styles.buttonContainer
+      : { ...styles.buttonContainer, backgroundColor: theme.high_medium }
+    }>
       <TouchableOpacity
         disabled={!isInputNotDisabled}
-        onPress={(): Promise<void> =>
-          onSubmit(
-            color,
-            name,
-            uuid,
-            setStatus,
-            closeBottomSheet,
-            handlerStates
-          )
-        }
+        onPress={(): Promise<void> => onSubmit()}
         style={styles.touchableButton}
       >
         <Text style={{ ...styles.text, color: theme.dark }}>
@@ -53,29 +57,6 @@ export default function SheetButton(): React.JSX.Element {
       </TouchableOpacity>
     </View>
   );
-}
-
-async function onSubmit(
-  color: string,
-  name: string,
-  profile_id: string,
-  setStatus: (status: number) => void,
-  closeBottomSheet: () => void,
-  handlerStates: () => void
-): Promise<void> {
-  try {
-    const { error, status } = await supabase
-      .from(CATEGORIES)
-      .insert({ color, name, profile_id });
-    if (error) throw error;
-
-    setStatus(status);
-    handlerStates();
-    ToastAndroid.show(CATEGORY_SUCCESS, ToastAndroid.SHORT);
-    closeBottomSheet();
-  } catch (error) {
-    console.log("Error saving category: ", error);
-  }
 }
 
 const styles = StyleSheet.create({

@@ -1,5 +1,5 @@
 import { theme } from "@/src/constants/theme";
-import { useCategory } from "@/src/providers/category_provider";
+import { useCategory } from "@/src/context/category_context";
 import { FontAwesome } from "@expo/vector-icons";
 import { StyleSheet, View } from "react-native";
 import { TextInput } from "react-native-gesture-handler";
@@ -33,11 +33,7 @@ export default function SheetInput({
           placeholder={placeholder}
           value={name}
           onChangeText={(text): void => setName(text)}
-          style={{
-            paddingHorizontal: 10,
-            color: theme.dark,
-            width: "85%",
-          }}
+          style={{ paddingHorizontal: 10, color: theme.dark, width: "85%" }}
         />
       </View>
     </View>

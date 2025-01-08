@@ -7,12 +7,12 @@ interface CategoryContextProps {
   isInputNotDisabled: boolean;
   status: number;
   categories: Category[];
-  category: Category;
+  category: Category | null;
   setName: (name: string) => void;
   setColor: (color: string) => void;
   setStatus: (status: number) => void;
   setCategories: (categories: Category[]) => void;
-  setCategory: (category: Category) => void;
+  setCategory: (category: Category | null) => void;
 }
 
 export const CategoryContext = createContext<CategoryContextProps>(

@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { StyleSheet, TouchableOpacity } from "react-native";
+import React, { useCallback, useEffect, useState } from "react";
+import { StyleSheet, ToastAndroid, TouchableOpacity } from "react-native";
 import { Text, View } from "react-native";
 import { theme } from "@/src/constants/theme";
 import CategoriesModal from "@/src/components/categories/categories_modal";
@@ -7,56 +7,75 @@ import ExpenseInput from "@/src/components/expense/add/expense_input";
 import { FontAwesome } from "@expo/vector-icons";
 import Switch from "@/src/components/ui/switch";
 import { useCategory } from "@/src/context/category_context";
+import { useUser } from "@/src/providers/user_provider";
+import { Transaction } from "@/src/models/transactions";
+import { supabase } from "@/lib/supabase";
+import { addTransaction } from "@/src/services/transaction-service";
+import { TRANSACTION_FAILED, TRANSACTION_SUCCESS } from "@/src/constants/supabase";
 
-interface FormValues {
-  type: string;
-  amount: string;
-  name: string;
-  note: string;
-  categoryName: string;
-}
+interface TransactionBody extends Transaction { }
+type TransactionType = "Expense" | "Income";
 
 export default function AddTransaction(): React.JSX.Element {
   // Modal state
   const [isVisible, setIsVisible] = useState<boolean>(false);
-  const { category } = useCategory();
-  // Form states
-  const [type, setType] = useState<string>("Expense");
-  const [amount, setAmount] = useState<string>("");
-  const [name, setName] = useState<string>("");
-  const [note, setNote] = useState<string>("");
-  const [categoryName, setCategoryName] = useState<string>("");
 
-  useEffect(() => {
-    setCategoryName(category?.name || "");
-  }, [category]);
+  // Form states
+  const [type, setType] = useState<TransactionType>("Expense");
+  const [amount, setAmount] = useState<string>("");
+  const [note, setNote] = useState<string>("");
+
+  const setAmountState = useCallback((value: string): void => {
+    if (!isNaN(Number(value)))
+      setAmount(value);
+
+  }, [setAmount]);
+
+  // Context
+  const { setCategory, category } = useCategory();
+  const { uuid } = useUser();
+
+  // OnInit
+  useEffect((): void => {
+    statesHandler();
+  }, []);
 
   // Functions
-  const onSubmit = (): void => {
-    const formValues: FormValues = {
-      type,
-      amount,
-      name,
-      note,
-      categoryName,
-    };
+  const onSubmit = async (): Promise<void> => {
+    try {
+      if (category === null || amount === "" || note === "") return;
+      const category_id: number = category.id!;
+      const numericAmount: number = Number(amount);
 
-    console.log(formValues);
+      await addTransaction({
+        type,
+        amount: numericAmount,
+        note,
+        category_id,
+        profile_id: uuid
+      });
+
+      statesHandler();
+      ToastAndroid.show(TRANSACTION_SUCCESS, ToastAndroid.SHORT);
+
+    } catch (error) {
+      ToastAndroid.show(TRANSACTION_FAILED, ToastAndroid.SHORT);
+    }
   };
 
+  const statesHandler = (): void => {
+    setAmount("");
+    setNote("");
+    setCategory(null);
+  };
+
+  // Element
   return (
     <View style={styles.container}>
       <View style={styles.containerWrapper}>
         {/* Heading */}
         <View>
-          <Text
-            style={{
-              ...styles.text,
-              fontSize: 20,
-              marginVertical: 10,
-              alignSelf: "center",
-            }}
-          >
+          <Text style={{ ...styles.text, fontSize: 20, marginVertical: 10, alignSelf: "center" }}>
             Type of transaction
           </Text>
 
@@ -67,14 +86,11 @@ export default function AddTransaction(): React.JSX.Element {
         <View style={{ marginVertical: 20, gap: 20 }}>
           <ExpenseInput
             value={amount}
-            setValue={setAmount}
+            setValue={setAmountState}
             placeholder="Amount"
+            keyBoardType="numeric"
           >
             <FontAwesome name="dollar" size={16} color={theme.light} />
-          </ExpenseInput>
-
-          <ExpenseInput value={name} setValue={setName} placeholder="Name">
-            <FontAwesome name="paperclip" size={16} color={theme.light} />
           </ExpenseInput>
 
           <ExpenseInput value={note} setValue={setNote} placeholder="Note">
@@ -82,20 +98,11 @@ export default function AddTransaction(): React.JSX.Element {
           </ExpenseInput>
 
           <View>
-            <ExpenseInput value={categoryName} placeholder="Category">
+            <ExpenseInput value={category?.name ?? ""} placeholder="Category">
               <FontAwesome name="bars" size={16} color={theme.light} />
             </ExpenseInput>
-            <TouchableOpacity
-              onPress={() => setIsVisible(true)}
-              style={styles.buttonModal}
-            >
-              <View
-                style={{
-                  width: "100%",
-                  alignItems: "center",
-                  justifyContent: "center",
-                }}
-              >
+            <TouchableOpacity onPress={() => setIsVisible(true)} style={styles.buttonModal}>
+              <View style={{ width: "100%", alignItems: "center", justifyContent: "center" }}>
                 <Text style={{ ...styles.text }}>Choose category</Text>
               </View>
             </TouchableOpacity>
@@ -103,20 +110,10 @@ export default function AddTransaction(): React.JSX.Element {
 
           {/* Submit button */}
           <TouchableOpacity
-            style={{
-              ...styles.buttonModal,
-              backgroundColor: theme.primary,
-              borderColor: theme.dark,
-            }}
-            onPress={(): void => onSubmit()}
+            style={{ ...styles.buttonModal, backgroundColor: theme.primary, borderColor: theme.dark }}
+            onPress={(): Promise<void> => onSubmit()}
           >
-            <View
-              style={{
-                width: "100%",
-                alignItems: "center",
-                justifyContent: "center",
-              }}
-            >
+            <View style={{ width: "100%", alignItems: "center", justifyContent: "center" }}>
               <Text style={{ ...styles.text }}>Add transaction</Text>
             </View>
           </TouchableOpacity>
@@ -129,7 +126,17 @@ export default function AddTransaction(): React.JSX.Element {
   );
 }
 
-function showData() {}
+
+async function createTransaction(props: TransactionBody): Promise<void> {
+  const { amount, type, note, category_id, profile_id } = props;
+  try {
+    const { error, status } = await supabase
+      .from("transactions")
+      .insert({ amount, type, note, category_id, profile_id });
+  } catch (error) {
+    console.error("Error creating transaction: ", error);
+  }
+}
 
 const styles = StyleSheet.create({
   container: {

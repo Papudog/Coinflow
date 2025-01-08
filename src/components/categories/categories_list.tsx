@@ -87,7 +87,7 @@ export default function CategoriesList(): React.JSX.Element {
 
       <FlatList
         data={data}
-        keyExtractor={(data: Category) => data && data.id.toString()}
+        keyExtractor={(data: Category) => data.id?.toString() ?? ""}
         horizontal={true}
         renderItem={renderItem}
         showsHorizontalScrollIndicator={false}

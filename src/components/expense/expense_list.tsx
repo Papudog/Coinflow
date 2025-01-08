@@ -1,96 +1,50 @@
-import React from "react";
-import {
-  FlatList,
-  ListRenderItem,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import React, { useEffect, useState } from "react";
+import { FlatList, ListRenderItem, Text, ToastAndroid, TouchableOpacity, View } from "react-native";
 import Animated, { FadeInLeft } from "react-native-reanimated";
 import Card from "../ui/card";
 import { theme } from "../../constants/theme";
 import { StyleSheet } from "react-native";
-import { FontAwesome } from "@expo/vector-icons";
+import { Transaction } from "@/src/models/transactions";
+import { fetchTransactions } from "@/src/services/transaction-service";
+import { TRANSACTION_FAILED } from "@/src/constants/supabase";
 
 export default function TransactionList(): React.JSX.Element {
-  const transactions = [
-    {
-      id: 1,
-      category: "🦐 Food",
-      amount: 20,
-      date: new Date(),
-      color: "#93FCF8",
-      type: "Expense",
-    },
-    {
-      id: 2,
-      category: "🏍️ Transport",
-      amount: 10,
-      date: new Date(),
-      color: "#BDB2FA",
-      type: "Expense",
-    },
-    {
-      id: 3,
-      category: "🦐 Food",
-      amount: 20,
-      date: new Date(),
-      color: "#93FCF8",
-      type: "Expense",
-    },
-    {
-      id: 4,
-      category: "🏍️ Transport",
-      amount: 10,
-      date: new Date(),
-      color: "#BDB2FA",
-      type: "Expense",
-    },
-    {
-      id: 5,
-      category: "🦐 Food",
-      amount: 20,
-      date: new Date(),
-      color: "#93FCF8",
-      type: "Expense",
-    },
-    {
-      id: 6,
-      category: "🏍️ Transport",
-      amount: 10,
-      date: new Date(),
-      color: "#BDB2FA",
-      type: "Expense",
-    },
-  ];
 
-  const renderTransactions: ListRenderItem<any> = ({ item, index }) => {
+  const [transactions, setTransactions] = useState<Transaction[]>([]);
+
+  useEffect(() => {
+    getTransactions();
+  }, [])
+
+  const getTransactions = async (): Promise<void> => {
+    try {
+      const data: Transaction[] = await fetchTransactions();
+      setTransactions(data);
+    } catch (error) {
+      ToastAndroid.show(TRANSACTION_FAILED, ToastAndroid.SHORT);
+    }
+  }
+
+  const renderTransactions: ListRenderItem<Transaction> = ({ item, index }) => {
     return (
-      <Animated.View
-        entering={FadeInLeft.delay((index + 1) * 400)
-          .duration(400)
-          .springify()}
+      <Animated.View entering={FadeInLeft.delay((index + 1) * 400)
+        .duration(400)
+        .springify()}
         style={{ marginVertical: 5 }}
       >
         <TouchableOpacity>
           <Card>
             <View style={styles.transactionHeading}>
               <View style={styles.transactionHeadingContent}>
-                <Text
-                  style={{
-                    ...styles.text,
-                    fontSize: 16,
-                    color: item.color,
-                  }}
-                >
-                  {item.category}
+                <Text style={{ ...styles.text, fontSize: 16, }}>
+                  {item.category_id}
                 </Text>
               </View>
             </View>
 
             <View style={styles.transactionBody}>
               <Text style={styles.text}>{item.amount}</Text>
-              <Text style={styles.text}>{item.date.toDateString()}</Text>
+              <Text style={styles.text}>{new Date(item.created_at!).toDateString()}</Text>
             </View>
           </Card>
         </TouchableOpacity>
@@ -101,7 +55,7 @@ export default function TransactionList(): React.JSX.Element {
   return (
     <FlatList
       data={transactions}
-      keyExtractor={(transactions) => transactions.id.toString()}
+      keyExtractor={(transactions) => transactions.id!.toString()}
       showsHorizontalScrollIndicator={false}
       scrollEnabled={false}
       renderItem={renderTransactions}

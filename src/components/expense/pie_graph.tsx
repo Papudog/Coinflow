@@ -2,16 +2,10 @@ import { StyleSheet, Text, View } from "react-native";
 import { theme } from "@/src/constants/theme";
 import { PieChart } from "react-native-gifted-charts";
 import React from "react";
-import Animated, { FadeInLeft } from "react-native-reanimated";
 
 export default function PieGraph(): React.JSX.Element {
   const pieData = [
-    {
-      value: 47,
-      color: "#009FFF",
-      gradientCenterColor: "#006DFF",
-      focused: true,
-    },
+    { value: 47, color: "#009FFF", gradientCenterColor: "#006DFF", focused: true },
     { value: 40, color: "#93FCF8", gradientCenterColor: "#3BE9DE" },
     { value: 16, color: "#BDB2FA", gradientCenterColor: "#8F80F3" },
     { value: 3, color: "#FFA5BA", gradientCenterColor: "#FF7F97" },

@@ -22,14 +22,19 @@ export default function CategoriesModal({
   isVisible,
   setIsVisible,
 }: CategoriesModalProps): React.JSX.Element {
-  const { categories, category, setCategory } = useCategory();
+  // States
   const [data, setData] = useState<Category[]>([]);
+
+  // Context
+  const { categories, category, setCategory } = useCategory();
 
   // Categories fetched from the context
   useEffect((): void => {
     setData(categories);
   }, [categories]);
 
+
+  // renderItem
   const renderItem: ListRenderItem<Category> = ({
     item,
   }): React.JSX.Element => {
@@ -48,22 +53,14 @@ export default function CategoriesModal({
             justifyContent: "space-between",
             width: "100%",
           }}
-          onPress={(): void => {
-            setCategory(item);
-          }}
+          onPress={(): void => setCategory(item)}
         >
           <View style={{ flex: 1, justifyContent: "center" }}>
             <Text style={{ ...styles.text, color: item.color, fontSize: 16 }}>
               {item.name}
             </Text>
           </View>
-          <View
-            style={{
-              flex: 1,
-              justifyContent: "center",
-              alignItems: "flex-end",
-            }}
-          >
+          <View style={{ flex: 1, justifyContent: "center", alignItems: "flex-end" }}>
             <TouchableOpacity
               style={{
                 backgroundColor: isSelected ? theme.primary : theme.medium,
@@ -72,9 +69,7 @@ export default function CategoriesModal({
                 borderColor: isSelected ? theme.medium : theme.dark,
                 borderRadius: 10,
               }}
-              onPress={(): void => {
-                setCategory(item);
-              }}
+              onPress={(): void => setCategory(item)}
             ></TouchableOpacity>
           </View>
         </Pressable>
@@ -83,13 +78,7 @@ export default function CategoriesModal({
   };
 
   return (
-    <View
-      style={{
-        alignItems: "center",
-        justifyContent: "center",
-        flex: 1,
-      }}
-    >
+    <View style={{ alignItems: "center", justifyContent: "center", flex: 1 }}>
       <Modal visible={isVisible} transparent={true} animationType="slide">
         <View style={styles.modalContainer}>
           <View style={styles.modalWrapper}>
@@ -106,21 +95,13 @@ export default function CategoriesModal({
             <FlatList
               data={data}
               renderItem={renderItem}
-              keyExtractor={(item) => item.id.toString()}
+              keyExtractor={(item: Category) => item.id?.toString() ?? ''}
               horizontal={false}
               showsVerticalScrollIndicator={false}
             />
 
-            <TouchableOpacity
-              onPress={() => setIsVisible(false)}
-              style={styles.buttonModal}
-            >
-              <View
-                style={{
-                  alignItems: "center",
-                  justifyContent: "center",
-                }}
-              >
+            <TouchableOpacity onPress={() => setIsVisible(false)} style={styles.buttonModal}>
+              <View style={{ alignItems: "center", justifyContent: "center" }}>
                 <Text style={{ ...styles.text }}>Select</Text>
               </View>
             </TouchableOpacity>
