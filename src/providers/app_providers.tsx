@@ -2,6 +2,7 @@ import { PropsWithChildren, StrictMode } from "react";
 import CategoryProvider from "./category_provider";
 import SheetProvider from "./sheet_provider";
 import UserProvider from "./user_provider";
+import TransactionProvider from "./transaction_provider";
 
 export default function AppProviders({
   children,
@@ -10,7 +11,11 @@ export default function AppProviders({
     <StrictMode>
       <UserProvider>
         <CategoryProvider>
-          <SheetProvider>{children}</SheetProvider>
+          <TransactionProvider>
+            <SheetProvider>
+              {children}
+            </SheetProvider>
+          </TransactionProvider>
         </CategoryProvider>
       </UserProvider>
     </StrictMode>

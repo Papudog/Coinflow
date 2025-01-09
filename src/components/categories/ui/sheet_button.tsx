@@ -1,4 +1,4 @@
-import { CATEGORY_FAILED, CATEGORY_SUCCESS, FIELDS_REQUIRED } from "@/src/constants/supabase";
+import { CATEGORY_POST_FAILED, CATEGORY_SUCCESS, FIELDS_REQUIRED } from "@/src/constants/supabase";
 import { theme } from "@/src/constants/theme";
 import { useCategory } from "@/src/context/category_context";
 import { useSheet } from "@/src/context/sheet_context";
@@ -37,7 +37,7 @@ export default function SheetButton(): React.JSX.Element {
       ToastAndroid.show(CATEGORY_SUCCESS, ToastAndroid.SHORT);
       closeBottomSheet();
     } catch (error) {
-      ToastAndroid.show(CATEGORY_FAILED, ToastAndroid.SHORT);
+      ToastAndroid.show(CATEGORY_POST_FAILED, ToastAndroid.SHORT);
     }
   }
 

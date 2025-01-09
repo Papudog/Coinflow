@@ -1,4 +1,4 @@
-import { View, TouchableOpacity, Text, StyleSheet } from "react-native";
+import { View, TouchableOpacity, StyleSheet } from "react-native";
 import { BottomTabBarProps } from "@react-navigation/bottom-tabs";
 import { FontAwesome } from "@expo/vector-icons";
 import React from "react";
@@ -15,9 +15,7 @@ export default function TabBar({
 }: BottomTabBarProps) {
   const icons: { [key: string]: (props: IconProps) => React.JSX.Element } = {
     dashboard: (props) => <FontAwesome name="dashboard" size={24} {...props} />,
-    add_transaction: (props) => (
-      <FontAwesome name="plus" size={24} {...props} />
-    ),
+    add_transaction: (props) => <FontAwesome name="plus" size={24} {...props} />,
     user_page: (props) => <FontAwesome name="user" size={24} {...props} />,
   };
 
@@ -29,8 +27,8 @@ export default function TabBar({
           options.tabBarLabel !== undefined
             ? options.tabBarLabel
             : options.title !== undefined
-            ? options.title
-            : route.name;
+              ? options.title
+              : route.name;
 
         const isFocused = state.index === index;
 

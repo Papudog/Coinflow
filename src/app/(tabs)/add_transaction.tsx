@@ -3,36 +3,35 @@ import { StyleSheet, ToastAndroid, TouchableOpacity } from "react-native";
 import { Text, View } from "react-native";
 import { theme } from "@/src/constants/theme";
 import CategoriesModal from "@/src/components/categories/categories_modal";
-import ExpenseInput from "@/src/components/expense/add/expense_input";
+import ExpenseInput from "@/src/components/expense/ui/expense_input";
 import { FontAwesome } from "@expo/vector-icons";
-import Switch from "@/src/components/ui/switch";
+import Switch from "@/src/components/expense/switch";
 import { useCategory } from "@/src/context/category_context";
 import { useUser } from "@/src/providers/user_provider";
 import { Transaction } from "@/src/models/transactions";
 import { supabase } from "@/lib/supabase";
 import { addTransaction } from "@/src/services/transaction-service";
-import { TRANSACTION_FAILED, TRANSACTION_SUCCESS } from "@/src/constants/supabase";
+import { TRANSACTION_GET_FAILED, TRANSACTION_SUCCESS } from "@/src/constants/supabase";
+import { useTransaction } from "@/src/context/transaction_context";
 
 interface TransactionBody extends Transaction { }
-type TransactionType = "Expense" | "Income";
 
 export default function AddTransaction(): React.JSX.Element {
   // Modal state
   const [isVisible, setIsVisible] = useState<boolean>(false);
 
   // Form states
-  const [type, setType] = useState<TransactionType>("Expense");
   const [amount, setAmount] = useState<string>("");
   const [note, setNote] = useState<string>("");
 
   const setAmountState = useCallback((value: string): void => {
     if (!isNaN(Number(value)))
       setAmount(value);
-
   }, [setAmount]);
 
   // Context
   const { setCategory, category } = useCategory();
+  const { setTransaction, typeSwitch, setTypeSwitch } = useTransaction();
   const { uuid } = useUser();
 
   // OnInit
@@ -47,25 +46,26 @@ export default function AddTransaction(): React.JSX.Element {
       const category_id: number = category.id!;
       const numericAmount: number = Number(amount);
 
-      await addTransaction({
-        type,
+      const data: Transaction = await addTransaction({
+        type: typeSwitch,
         amount: numericAmount,
         note,
         category_id,
         profile_id: uuid
       });
 
+      setTransaction(data);
       statesHandler();
       ToastAndroid.show(TRANSACTION_SUCCESS, ToastAndroid.SHORT);
-
     } catch (error) {
-      ToastAndroid.show(TRANSACTION_FAILED, ToastAndroid.SHORT);
+      ToastAndroid.show(TRANSACTION_GET_FAILED, ToastAndroid.SHORT);
     }
   };
 
   const statesHandler = (): void => {
     setAmount("");
     setNote("");
+    setTypeSwitch("Expense");
     setCategory(null);
   };
 
@@ -79,7 +79,7 @@ export default function AddTransaction(): React.JSX.Element {
             Type of transaction
           </Text>
 
-          <Switch value={type} setValue={setType} />
+          <Switch />
         </View>
 
         {/* Form */}

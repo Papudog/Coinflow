@@ -1,25 +1,39 @@
 import { supabase } from "@/lib/supabase";
 import { Transaction } from "../models/transactions";
-import { TRANSACTION_FAILED, TRANSACTIONS } from "../constants/supabase";
+import { TRANSACTION_GET_FAILED, TRANSACTIONS } from "../constants/supabase";
 
-export async function addTransaction(transaction: Transaction): Promise<void> {
+export async function addTransaction(transaction: Transaction): Promise<Transaction> {
   const { amount, type, note, category_id, profile_id } = transaction
 
-  const { error } = await supabase
+  const { data, error } = await supabase
     .from(TRANSACTIONS)
-    .insert({ amount, type, note, category_id, profile_id });
+    .insert({ amount, type, note, category_id, profile_id })
+    .select("*, categories(*)")
+    .single();
 
   if (error) throw new Error("Failed to save transaction.");
+
+  return data as Transaction;
 }
 
 export async function fetchTransactions(): Promise<Transaction[]> {
+  const { data, error } = await supabase
+    .from(TRANSACTIONS)
+    .select("*, categories(*)");
 
-  const { data, error } = await supabase.from(TRANSACTIONS).select("*");
-
-  if (error) {
-    console.error(error)
-    throw new Error(TRANSACTION_FAILED)
-  };
+  if (error) throw new Error(TRANSACTION_GET_FAILED)
 
   return data as Transaction[];
 }
+
+export async function fetchTransactionsByType(type: string): Promise<Transaction[]> {
+  const { data, error } = await supabase
+    .from(TRANSACTIONS)
+    .select("*, categories(*)")
+    .eq("type", type);
+
+  if (error) throw new Error(TRANSACTION_GET_FAILED)
+
+  return data as Transaction[];
+}
+

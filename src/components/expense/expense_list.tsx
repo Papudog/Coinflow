@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { FlatList, ListRenderItem, Text, ToastAndroid, TouchableOpacity, View } from "react-native";
 import Animated, { FadeInLeft } from "react-native-reanimated";
 import Card from "../ui/card";
@@ -6,23 +6,29 @@ import { theme } from "../../constants/theme";
 import { StyleSheet } from "react-native";
 import { Transaction } from "@/src/models/transactions";
 import { fetchTransactions } from "@/src/services/transaction-service";
-import { TRANSACTION_FAILED } from "@/src/constants/supabase";
+import { TRANSACTION_GET_FAILED } from "@/src/constants/supabase";
+import { useTransaction } from "@/src/context/transaction_context";
 
 export default function TransactionList(): React.JSX.Element {
+  // Context
+  const { transactions } = useTransaction();
 
-  const [transactions, setTransactions] = useState<Transaction[]>([]);
+  const TypeText = (item: Transaction): React.JSX.Element => {
+    if (item.type === 'Expense')
+      return (
+        <Text style={styles.text}>
+          <Text style={{ color: theme.danger }}>- </Text>
+          {`${item.amount} $`}
+        </Text>
+      )
+    else
+      return (
+        <Text style={styles.text}>
+          <Text style={{ color: theme.success }}>+ </Text>
+          {`${item.amount} $`}
+        </Text>
+      )
 
-  useEffect(() => {
-    getTransactions();
-  }, [])
-
-  const getTransactions = async (): Promise<void> => {
-    try {
-      const data: Transaction[] = await fetchTransactions();
-      setTransactions(data);
-    } catch (error) {
-      ToastAndroid.show(TRANSACTION_FAILED, ToastAndroid.SHORT);
-    }
   }
 
   const renderTransactions: ListRenderItem<Transaction> = ({ item, index }) => {
@@ -36,15 +42,20 @@ export default function TransactionList(): React.JSX.Element {
           <Card>
             <View style={styles.transactionHeading}>
               <View style={styles.transactionHeadingContent}>
-                <Text style={{ ...styles.text, fontSize: 16, }}>
-                  {item.category_id}
+                <Text style={{
+                  ...styles.text, fontSize: 16,
+                  color: item.categories?.color ?
+                    item.categories?.color :
+                    theme.light
+                }}>
+                  {item.categories?.name ?? ''}
                 </Text>
               </View>
             </View>
 
             <View style={styles.transactionBody}>
-              <Text style={styles.text}>{item.amount}</Text>
-              <Text style={styles.text}>{new Date(item.created_at!).toDateString()}</Text>
+              <Text style={styles.text}>{item.note}</Text>
+              <TypeText {...item} />
             </View>
           </Card>
         </TouchableOpacity>

@@ -6,7 +6,7 @@ import { supabase } from "@/lib/supabase";
 import ExpenseSection from "@/src/components/expense/expense_section";
 import { useUser } from "@/src/providers/user_provider";
 import TransactionList from "@/src/components/expense/expense_list";
-import Switch from "@/src/components/ui/switch";
+import Switch from "@/src/components/expense/switch";
 import CategoriesList from "@/src/components/categories/categories_list";
 
 export default function Dashboard(): React.JSX.Element {
@@ -47,7 +47,7 @@ export default function Dashboard(): React.JSX.Element {
           <CategoriesList />
           <ExpenseSection />
           <View style={{ marginVertical: 20 }}>
-            <Switch value={type} setValue={setType} />
+            <Switch />
           </View>
           <TransactionList />
         </View>

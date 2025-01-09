@@ -1,34 +1,32 @@
 import { theme } from "@/src/constants/theme";
 import { FontAwesome } from "@expo/vector-icons";
-import React, { useEffect, useState } from "react";
-import {
-  ListRenderItem,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-} from "react-native";
+import React, { useEffect } from "react";
+import { ListRenderItem, StyleSheet, Text, ToastAndroid, TouchableOpacity } from "react-native";
 import { FlatList, View } from "react-native";
 import Animated, { FadeInLeft } from "react-native-reanimated";
 import CategoriesSheet from "./categories_sheet";
-import { supabase } from "@/lib/supabase";
 import { Category } from "../../models/categories";
-import { CATEGORIES } from "../../constants/supabase";
+import { CATEGORY_GET_FAILED } from "../../constants/supabase";
 import { useSheet } from "@/src/context/sheet_context";
 import { useCategory } from "@/src/context/category_context";
+import { fetchCategories } from "@/src/services/category-service";
 
 export default function CategoriesList(): React.JSX.Element {
   const { openBottomSheet } = useSheet();
-  const { status, setCategories } = useCategory();
-  const [data, setData] = useState<Category[]>([]);
+  const { status, setCategories, categories } = useCategory();
 
   useEffect((): void => {
     getCategories()
-      .then((resolve): void => {
-        setData(resolve);
-        setCategories(resolve);
-      })
-      .catch(console.error);
-  }, [status]);
+  }, [categories]);
+
+  const getCategories = async (): Promise<void> => {
+    try {
+      const data = await fetchCategories();
+      setCategories(data);
+    } catch (error) {
+      ToastAndroid.show(CATEGORY_GET_FAILED, ToastAndroid.SHORT);
+    }
+  };
 
   const renderItem: ListRenderItem<Category> = ({
     item,
@@ -86,7 +84,7 @@ export default function CategoriesList(): React.JSX.Element {
       </View>
 
       <FlatList
-        data={data}
+        data={categories}
         keyExtractor={(data: Category) => data.id?.toString() ?? ""}
         horizontal={true}
         renderItem={renderItem}
@@ -96,17 +94,7 @@ export default function CategoriesList(): React.JSX.Element {
   );
 }
 
-function getCategories(): Promise<Category[]> {
-  return new Promise(async (resolve, reject) => {
-    try {
-      const { data, error } = await supabase.from(CATEGORIES).select("*");
-      if (error) throw error;
-      resolve(data);
-    } catch (error) {
-      reject(error);
-    }
-  });
-}
+
 
 const styles = StyleSheet.create({
   text: {
