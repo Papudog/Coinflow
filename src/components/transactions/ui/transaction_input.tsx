@@ -12,7 +12,7 @@ interface ExpenseInputProps {
   children?: ReactNode;
 }
 
-export default function ExpenseInput(
+export default function TransactionInput(
   { value, setValue, placeholder, keyBoardType, children }: ExpenseInputProps
 ): React.JSX.Element {
   return (

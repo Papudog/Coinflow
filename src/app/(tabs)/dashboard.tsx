@@ -3,11 +3,11 @@ import { useEffect, useState } from "react";
 import { Image, ScrollView, StyleSheet, Text, View } from "react-native";
 import Animated, { FadeInLeft } from "react-native-reanimated";
 import { supabase } from "@/lib/supabase";
-import ExpenseSection from "@/src/components/expense/expense_section";
 import { useUser } from "@/src/providers/user_provider";
-import TransactionList from "@/src/components/expense/expense_list";
-import Switch from "@/src/components/expense/switch";
+import TransactionList from "@/src/components/transactions/transaction_list";
+import Switch from "@/src/components/transactions/ui/transaction_switch";
 import CategoriesList from "@/src/components/categories/categories_list";
+import TransactionSection from "@/src/components/transactions/transaction_section";
 
 export default function Dashboard(): React.JSX.Element {
   const { setUuid } = useUser();
@@ -45,7 +45,7 @@ export default function Dashboard(): React.JSX.Element {
 
         <View>
           <CategoriesList />
-          <ExpenseSection />
+          <TransactionSection />
           <View style={{ marginVertical: 20 }}>
             <Switch />
           </View>

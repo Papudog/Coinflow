@@ -3,7 +3,7 @@ import { theme } from "../../constants/theme";
 import Animated, { FadeInLeft } from "react-native-reanimated";
 import PieGraph from "./pie_graph";
 
-export default function ExpenseSection(): React.JSX.Element {
+export default function TransactionSection(): React.JSX.Element {
   return (
     <Animated.View entering={FadeInLeft.delay(400).duration(400).springify()}>
       <View style={styles.expenseContainer}>

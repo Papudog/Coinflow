@@ -3,9 +3,9 @@ import { StyleSheet, ToastAndroid, TouchableOpacity } from "react-native";
 import { Text, View } from "react-native";
 import { theme } from "@/src/constants/theme";
 import CategoriesModal from "@/src/components/categories/categories_modal";
-import ExpenseInput from "@/src/components/expense/ui/expense_input";
+import TransactionInput from "@/src/components/transactions/ui/transaction_input";
 import { FontAwesome } from "@expo/vector-icons";
-import Switch from "@/src/components/expense/switch";
+import Switch from "@/src/components/transactions/ui/transaction_switch";
 import { useCategory } from "@/src/context/category_context";
 import { useUser } from "@/src/providers/user_provider";
 import { Transaction } from "@/src/models/transactions";
@@ -84,23 +84,23 @@ export default function AddTransaction(): React.JSX.Element {
 
         {/* Form */}
         <View style={{ marginVertical: 20, gap: 20 }}>
-          <ExpenseInput
+          <TransactionInput
             value={amount}
             setValue={setAmountState}
             placeholder="Amount"
             keyBoardType="numeric"
           >
             <FontAwesome name="dollar" size={16} color={theme.light} />
-          </ExpenseInput>
+          </TransactionInput>
 
-          <ExpenseInput value={note} setValue={setNote} placeholder="Note">
+          <TransactionInput value={note} setValue={setNote} placeholder="Note">
             <FontAwesome name="pencil" size={16} color={theme.light} />
-          </ExpenseInput>
+          </TransactionInput>
 
           <View>
-            <ExpenseInput value={category?.name ?? ""} placeholder="Category">
+            <TransactionInput value={category?.name ?? ""} placeholder="Category">
               <FontAwesome name="bars" size={16} color={theme.light} />
-            </ExpenseInput>
+            </TransactionInput>
             <TouchableOpacity onPress={() => setIsVisible(true)} style={styles.buttonModal}>
               <View style={{ width: "100%", alignItems: "center", justifyContent: "center" }}>
                 <Text style={{ ...styles.text }}>Choose category</Text>
