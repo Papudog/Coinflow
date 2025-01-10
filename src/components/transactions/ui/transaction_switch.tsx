@@ -1,20 +1,24 @@
 import { TRANSACTION_GET_FAILED } from "@/src/constants/supabase";
 import { theme } from "@/src/constants/theme";
 import { useTransaction } from "@/src/context/transaction_context";
-import { Transaction } from "@/src/models/transactions";
+import { Transaction, TransactionType } from "@/src/models/transactions";
 import { fetchTransactionsByType } from "@/src/services/transaction-service";
 import { useEffect, useState } from "react";
 import { StyleSheet, Text, ToastAndroid, TouchableOpacity, View } from "react-native";
 
 
-export default function Switch(): React.JSX.Element {
-  const [isActive, setIsActive] = useState<boolean>(false);
-  const { typeSwitch, setTypeSwitch, setTransactions } = useTransaction();
+export default function TransactionSwitch(): React.JSX.Element {
+  const [isActive, setIsActive] = useState<boolean>(true);
+  const { setTransactions, transaction, setTypeSwitch, typeSwitch } = useTransaction()
+
 
   useEffect((): void => {
-    !isActive ? setTypeSwitch("Income") : setTypeSwitch("Expense");
-    getTransactionsById();
+    setTypeSwitch(isActive ? "Expense" : "Income");
   }, [isActive]);
+
+  useEffect((): void => {
+    getTransactionsById();
+  }, [typeSwitch, transaction]);
 
   const getTransactionsById = async (): Promise<void> => {
     try {
@@ -30,15 +34,15 @@ export default function Switch(): React.JSX.Element {
       <View style={styles.switchWrapper}>
         <TouchableOpacity
           onPress={() => setIsActive(!isActive)}
-          style={{ ...styles.button, backgroundColor: isActive ? theme.medium : theme.primary }}>
-          <Text style={{ ...styles.text, color: isActive ? theme.primary : theme.dark }}>
+          style={{ ...styles.button, backgroundColor: typeSwitch === 'Expense' ? theme.primary : theme.medium }}>
+          <Text style={{ ...styles.text, color: typeSwitch === 'Expense' ? theme.dark : theme.primary }}>
             Expense
           </Text>
         </TouchableOpacity>
         <TouchableOpacity
           onPress={() => setIsActive(!isActive)}
-          style={{ ...styles.button, backgroundColor: !isActive ? theme.medium : theme.primary, }}>
-          <Text style={{ ...styles.text, color: !isActive ? theme.primary : theme.dark }}>
+          style={{ ...styles.button, backgroundColor: typeSwitch === 'Income' ? theme.primary : theme.medium, }}>
+          <Text style={{ ...styles.text, color: typeSwitch === 'Income' ? theme.dark : theme.primary }}>
             Income
           </Text>
         </TouchableOpacity>

@@ -1,12 +1,10 @@
-import React, { useEffect } from "react";
-import { FlatList, ListRenderItem, Text, ToastAndroid, TouchableOpacity, View } from "react-native";
+import React from "react";
+import { FlatList, ListRenderItem, Text, TouchableOpacity, View } from "react-native";
 import Animated, { FadeInLeft } from "react-native-reanimated";
 import Card from "../ui/card";
 import { theme } from "../../constants/theme";
 import { StyleSheet } from "react-native";
 import { Transaction } from "@/src/models/transactions";
-import { fetchTransactions } from "@/src/services/transaction-service";
-import { TRANSACTION_GET_FAILED } from "@/src/constants/supabase";
 import { useTransaction } from "@/src/context/transaction_context";
 
 export default function TransactionList(): React.JSX.Element {

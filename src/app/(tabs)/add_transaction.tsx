@@ -1,14 +1,14 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { StyleSheet, ToastAndroid, TouchableOpacity } from "react-native";
 import { Text, View } from "react-native";
 import { theme } from "@/src/constants/theme";
 import CategoriesModal from "@/src/components/categories/categories_modal";
 import TransactionInput from "@/src/components/transactions/ui/transaction_input";
 import { FontAwesome } from "@expo/vector-icons";
-import Switch from "@/src/components/transactions/ui/transaction_switch";
+import TransactionSwitch from "@/src/components/transactions/ui/transaction_switch";
 import { useCategory } from "@/src/context/category_context";
 import { useUser } from "@/src/providers/user_provider";
-import { Transaction } from "@/src/models/transactions";
+import { Transaction, TransactionType } from "@/src/models/transactions";
 import { supabase } from "@/lib/supabase";
 import { addTransaction } from "@/src/services/transaction-service";
 import { TRANSACTION_GET_FAILED, TRANSACTION_SUCCESS } from "@/src/constants/supabase";
@@ -21,13 +21,8 @@ export default function AddTransaction(): React.JSX.Element {
   const [isVisible, setIsVisible] = useState<boolean>(false);
 
   // Form states
-  const [amount, setAmount] = useState<string>("");
+  const [amount, setAmount] = useState<number>(0);
   const [note, setNote] = useState<string>("");
-
-  const setAmountState = useCallback((value: string): void => {
-    if (!isNaN(Number(value)))
-      setAmount(value);
-  }, [setAmount]);
 
   // Context
   const { setCategory, category } = useCategory();
@@ -42,7 +37,7 @@ export default function AddTransaction(): React.JSX.Element {
   // Functions
   const onSubmit = async (): Promise<void> => {
     try {
-      if (category === null || amount === "" || note === "") return;
+      if (category === null || amount === 0 || note === "") return;
       const category_id: number = category.id!;
       const numericAmount: number = Number(amount);
 
@@ -63,9 +58,8 @@ export default function AddTransaction(): React.JSX.Element {
   };
 
   const statesHandler = (): void => {
-    setAmount("");
+    setAmount(0);
     setNote("");
-    setTypeSwitch("Expense");
     setCategory(null);
   };
 
@@ -79,26 +73,33 @@ export default function AddTransaction(): React.JSX.Element {
             Type of transaction
           </Text>
 
-          <Switch />
+          <TransactionSwitch />
         </View>
 
         {/* Form */}
         <View style={{ marginVertical: 20, gap: 20 }}>
-          <TransactionInput
+          <TransactionInput<number>
             value={amount}
-            setValue={setAmountState}
+            setValue={setAmount}
             placeholder="Amount"
             keyBoardType="numeric"
           >
             <FontAwesome name="dollar" size={16} color={theme.light} />
           </TransactionInput>
 
-          <TransactionInput value={note} setValue={setNote} placeholder="Note">
+          <TransactionInput<string>
+            value={note}
+            setValue={setNote}
+            placeholder="Note"
+          >
             <FontAwesome name="pencil" size={16} color={theme.light} />
           </TransactionInput>
 
           <View>
-            <TransactionInput value={category?.name ?? ""} placeholder="Category">
+            <TransactionInput<string>
+              value={category?.name ?? ""}
+              placeholder="Category"
+            >
               <FontAwesome name="bars" size={16} color={theme.light} />
             </TransactionInput>
             <TouchableOpacity onPress={() => setIsVisible(true)} style={styles.buttonModal}>

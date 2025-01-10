@@ -5,7 +5,7 @@ import Animated, { FadeInLeft } from "react-native-reanimated";
 import { supabase } from "@/lib/supabase";
 import { useUser } from "@/src/providers/user_provider";
 import TransactionList from "@/src/components/transactions/transaction_list";
-import Switch from "@/src/components/transactions/ui/transaction_switch";
+import TransactionSwitch from "@/src/components/transactions/ui/transaction_switch";
 import CategoriesList from "@/src/components/categories/categories_list";
 import TransactionSection from "@/src/components/transactions/transaction_section";
 
@@ -47,7 +47,7 @@ export default function Dashboard(): React.JSX.Element {
           <CategoriesList />
           <TransactionSection />
           <View style={{ marginVertical: 20 }}>
-            <Switch />
+            <TransactionSwitch />
           </View>
           <TransactionList />
         </View>

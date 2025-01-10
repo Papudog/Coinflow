@@ -1,20 +1,35 @@
 import { theme } from "@/src/constants/theme";
-import { ReactNode } from "react";
+import React, { ReactNode } from "react";
 import { KeyboardTypeOptions, Text } from "react-native";
 import { StyleSheet, View } from "react-native";
 import { TextInput } from "react-native-gesture-handler";
 
-interface ExpenseInputProps {
-  value: string;
-  setValue?: (value: string) => void;
+interface ExpenseInputProps<T> {
+  value: T;
+  setValue?: (value: T) => void;
   placeholder: string;
   keyBoardType?: KeyboardTypeOptions;
   children?: ReactNode;
 }
 
-export default function TransactionInput(
-  { value, setValue, placeholder, keyBoardType, children }: ExpenseInputProps
+
+
+export default function TransactionInput<T>(
+  { value, setValue, placeholder, keyBoardType, children }: ExpenseInputProps<T>
 ): React.JSX.Element {
+  const isNumber: boolean = typeof value === "number";
+  const isString: boolean = typeof value === "string";
+
+  const textHandler = (text: string): void => {
+    if (!setValue) return;
+
+    if (isNumber)
+      setValue(text !== '' ? (parseFloat(text) as T) : (0 as T));
+    else if (isString)
+      setValue(text as T);
+  }
+
+
   return (
     <View style={styles.inputContainer}>
       <View style={styles.inputWrapper}>
@@ -25,9 +40,11 @@ export default function TransactionInput(
           <TextInput
             placeholder={placeholder}
             keyboardType={keyBoardType ?? "default"}
-            value={value}
+            value={isNumber
+              ? (value as number).toString()
+              : (value as string)}
             readOnly={setValue ? false : true}
-            onChangeText={(text): void => setValue && setValue(text)}
+            onChangeText={(text): void => textHandler(text)}
             placeholderTextColor={theme.light}
             style={styles.text}
           />
