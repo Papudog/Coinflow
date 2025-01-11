@@ -1,17 +1,16 @@
 import { theme } from "@/src/constants/theme";
 import { useTransaction } from "@/src/context/transaction_context";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { StyleSheet, Text, ToastAndroid, TouchableOpacity, View } from "react-native";
 
 
 export default function TransactionSwitch(): React.JSX.Element {
   const [isActive, setIsActive] = useState<boolean>(true);
-  const { setTypeSwitch, typeSwitch } = useTransaction()
+  const { setTypeSwitch, typeSwitch } = useTransaction();
 
   useEffect((): void => {
     setTypeSwitch(isActive ? "Expense" : "Income");
   }, [isActive]);
-
 
   return (
     <View style={styles.switchContainer}>

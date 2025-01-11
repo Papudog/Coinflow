@@ -8,8 +8,7 @@ import { FontAwesome } from "@expo/vector-icons";
 import TransactionSwitch from "@/src/components/transactions/ui/transaction_switch";
 import { useCategory } from "@/src/context/category_context";
 import { useUser } from "@/src/providers/user_provider";
-import { Transaction, TransactionType } from "@/src/models/transactions";
-import { supabase } from "@/lib/supabase";
+import { Transaction } from "@/src/models/transactions";
 import { addTransaction } from "@/src/services/transaction-service";
 import { TRANSACTION_GET_FAILED, TRANSACTION_SUCCESS } from "@/src/constants/supabase";
 import { useTransaction } from "@/src/context/transaction_context";
@@ -72,7 +71,6 @@ export default function AddTransaction(): React.JSX.Element {
           <Text style={{ ...styles.text, fontSize: 20, marginVertical: 10, alignSelf: "center" }}>
             Type of transaction
           </Text>
-
           <TransactionSwitch />
         </View>
 
@@ -125,18 +123,6 @@ export default function AddTransaction(): React.JSX.Element {
       <CategoriesModal setIsVisible={setIsVisible} isVisible={isVisible} />
     </View>
   );
-}
-
-
-async function createTransaction(props: TransactionBody): Promise<void> {
-  const { amount, type, note, category_id, profile_id } = props;
-  try {
-    const { error, status } = await supabase
-      .from("transactions")
-      .insert({ amount, type, note, category_id, profile_id });
-  } catch (error) {
-    console.error("Error creating transaction: ", error);
-  }
 }
 
 const styles = StyleSheet.create({

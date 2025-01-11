@@ -22,7 +22,7 @@ const styles = StyleSheet.create({
 
   cardWrapper: {
     width: "100%",
-    height: 100,
+    height: 70,
     borderRadius: 10,
     borderWidth: 1,
     borderColor: "rgba(255, 255, 255, 0.1)",

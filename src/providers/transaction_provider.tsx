@@ -7,7 +7,7 @@ import { fetchTransactions } from "../services/transaction-service";
 export default function TransactionProvider({ children }: PropsWithChildren): React.JSX.Element {
   // States
   const [lastTransaction, setLastTransaction] = useState<Transaction | null>(null);
-  const [transactionsData, setTransactionsData] = useState<Transaction[]>([]);
+  const [transactions, setTransaction] = useState<Transaction[]>([]);
   const [typeSwitch, setTypeSwitch] = useState<TransactionType>("Expense");
 
   // Init
@@ -18,7 +18,7 @@ export default function TransactionProvider({ children }: PropsWithChildren): Re
         if (data.length === 0)
           ToastAndroid.show("No transactions found", ToastAndroid.SHORT);
         else
-          setTransactionsData(data);
+          setTransaction(data);
       } catch (error) {
         ToastAndroid.show("Failed to fetch transactions", ToastAndroid.SHORT);
       }
@@ -27,14 +27,15 @@ export default function TransactionProvider({ children }: PropsWithChildren): Re
   }, [lastTransaction]);
 
   // Computed
-  const filteredTransactions: Transaction[] = useMemo(() => {
-    return transactionsData.filter((transaction: Transaction) => transaction.type === typeSwitch)
-  }, [typeSwitch, transactionsData]);
+  const transactionsByType: Transaction[] = useMemo(() => {
+    return transactions.filter((transaction: Transaction) => transaction.type === typeSwitch)
+  }, [typeSwitch, transactions]);
 
   return (
     <TransactionContext.Provider value={{
       setLastTransaction,
-      transactions: filteredTransactions,
+      transactions,
+      transactionsByType,
       typeSwitch,
       setTypeSwitch
     }}>

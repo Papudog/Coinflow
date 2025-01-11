@@ -20,7 +20,7 @@ export async function fetchTransactions(): Promise<Transaction[]> {
   const { data, error } = await supabase
     .from(TRANSACTIONS)
     .select("*, categories(*)")
-    .order("created_at", { ascending: false });
+  // .order("created_at", { ascending: false });
 
   if (error) throw new Error(TRANSACTION_GET_FAILED)
 

@@ -9,7 +9,7 @@ import { useTransaction } from "@/src/context/transaction_context";
 
 export default function TransactionList(): React.JSX.Element {
   // Context
-  const { transactions } = useTransaction();
+  const { transactionsByType } = useTransaction();
 
   const TypeText = (item: Transaction): React.JSX.Element => {
     if (item.type === 'Expense')
@@ -26,7 +26,6 @@ export default function TransactionList(): React.JSX.Element {
           {`${item.amount} $`}
         </Text>
       )
-
   }
 
   const renderTransactions: ListRenderItem<Transaction> = ({ item, index }) => {
@@ -41,8 +40,7 @@ export default function TransactionList(): React.JSX.Element {
             <View style={styles.transactionHeading}>
               <View style={styles.transactionHeadingContent}>
                 <Text style={{
-                  ...styles.text, fontSize: 16,
-                  color: item.categories?.color ?
+                  ...styles.text, fontSize: 16, color: item.categories?.color ?
                     item.categories?.color :
                     theme.light
                 }}>
@@ -63,8 +61,8 @@ export default function TransactionList(): React.JSX.Element {
 
   return (
     <FlatList
-      data={transactions}
-      keyExtractor={(transactions) => transactions.id!.toString()}
+      data={transactionsByType}
+      keyExtractor={(transactionsByType) => transactionsByType.id!.toString()}
       showsHorizontalScrollIndicator={false}
       scrollEnabled={false}
       renderItem={renderTransactions}
@@ -79,25 +77,14 @@ const styles = StyleSheet.create({
     paddingVertical: 2,
     paddingHorizontal: 10,
   },
-  buttonFilter: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    gap: 8,
-    backgroundColor: "rgba(131, 208, 255, 0.1)",
-    borderColor: theme.secondary,
-    borderWidth: 1,
-    paddingHorizontal: 12,
-    paddingVertical: 4,
-    borderRadius: 12,
-  },
   transactionHeadingContent: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
   },
   transactionBody: {
-    flexDirection: "column",
+    flexDirection: "row",
+    alignItems: "center",
     justifyContent: "space-between",
     padding: 10,
   },

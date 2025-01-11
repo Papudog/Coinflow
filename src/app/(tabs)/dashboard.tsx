@@ -4,14 +4,11 @@ import { Image, ScrollView, StyleSheet, Text, View } from "react-native";
 import Animated, { FadeInLeft } from "react-native-reanimated";
 import { supabase } from "@/lib/supabase";
 import { useUser } from "@/src/providers/user_provider";
-import TransactionList from "@/src/components/transactions/transaction_list";
-import TransactionSwitch from "@/src/components/transactions/ui/transaction_switch";
 import CategoriesList from "@/src/components/categories/categories_list";
 import TransactionSection from "@/src/components/transactions/transaction_section";
 
 export default function Dashboard(): React.JSX.Element {
   const { setUuid } = useUser();
-  const [type, setType] = useState<string>("Expense");
 
   useEffect((): void => {
     const getUserAuth = async (): Promise<void> => {
@@ -24,21 +21,12 @@ export default function Dashboard(): React.JSX.Element {
   return (
     <ScrollView style={styles.container}>
       <View style={styles.containerWrapper}>
-        <Animated.View
-          entering={FadeInLeft.delay(400).duration(400).springify()}
-          style={styles.header}
-        >
+        <Animated.View entering={FadeInLeft.delay(400).duration(400).springify()} style={styles.header}>
           <Image
             source={require("../../assets/images/bud_logo.png")}
             style={{ width: 40, height: 32 }}
           />
-          <Text
-            style={{
-              ...styles.text,
-              fontFamily: "Outfit-Bold",
-              fontSize: 32,
-            }}
-          >
+          <Text style={{ ...styles.text, fontFamily: "Outfit-Bold", fontSize: 32 }}>
             Coinflow
           </Text>
         </Animated.View>

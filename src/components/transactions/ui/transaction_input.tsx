@@ -42,7 +42,8 @@ export default function TransactionInput<T>(
             keyboardType={keyBoardType ?? "default"}
             value={isNumber
               ? (value as number).toString()
-              : (value as string)}
+              : (value as string)
+            }
             readOnly={setValue ? false : true}
             onChangeText={(text): void => textHandler(text)}
             placeholderTextColor={theme.light}

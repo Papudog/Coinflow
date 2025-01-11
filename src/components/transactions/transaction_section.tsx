@@ -4,26 +4,42 @@ import Animated, { FadeInLeft } from "react-native-reanimated";
 import PieGraph from "./pie_graph";
 import TransactionSwitch from "./ui/transaction_switch";
 import TransactionList from "./transaction_list";
+import { useTransaction } from "@/src/context/transaction_context";
+import { Transaction } from "@/src/models/transactions";
+import { useMemo } from "react";
 
 export default function TransactionSection(): React.JSX.Element {
+  const { transactions, typeSwitch } = useTransaction();
+
+  const totalTransactions: string = useMemo(() => {
+    const sum: number = transactions
+      .filter((transaction: Transaction) => transaction.type === typeSwitch)
+      .reduce((acc: number, transaction: Transaction) => {
+        return acc + transaction.amount
+      }, 0)
+
+    return sum.toString()
+  }, [transactions, typeSwitch])
 
   return (
     <Animated.View entering={FadeInLeft.delay(400).duration(400).springify()}>
       {/* Expense Section */}
-
       <View style={styles.expenseContainer}>
         <View style={styles.expenseWrapper}>
           <View style={{ flex: 1 }}>
             <View style={{ marginBottom: 5 }}>
               <Text style={{ ...styles.text_tertiary, fontSize: 24 }}>
-                My expenses
+                {`My ${typeSwitch === "Expense" ? "expenses" : "incomes"}`}
               </Text>
               <Text style={{ ...styles.text, fontSize: 12 }}>
-                Weekly summary
+                Summary
               </Text>
             </View>
             <Text style={{ ...styles.text, fontSize: 22 }}>
-              $ 1400.<Text style={{ fontSize: 18 }}>00</Text>
+              $ {`${totalTransactions.split(".")[0]}`}
+              <Text style={{ ...styles.text, fontSize: 16 }}>
+                {`${totalTransactions.split(".")[1] ? "." + totalTransactions.split(".")[1] : ".00"}`}
+              </Text>
             </Text>
           </View>
           {/* Pie Graph */}
