@@ -2,12 +2,16 @@ import { StyleSheet, Text, View } from "react-native";
 import { theme } from "../../constants/theme";
 import Animated, { FadeInLeft } from "react-native-reanimated";
 import PieGraph from "./pie_graph";
+import TransactionSwitch from "./ui/transaction_switch";
+import TransactionList from "./transaction_list";
 
 export default function TransactionSection(): React.JSX.Element {
+
   return (
     <Animated.View entering={FadeInLeft.delay(400).duration(400).springify()}>
+      {/* Expense Section */}
+
       <View style={styles.expenseContainer}>
-        {/* Expense Section */}
         <View style={styles.expenseWrapper}>
           <View style={{ flex: 1 }}>
             <View style={{ marginBottom: 5 }}>
@@ -25,10 +29,23 @@ export default function TransactionSection(): React.JSX.Element {
           {/* Pie Graph */}
           <PieGraph />
         </View>
+        <View>
+          <View style={{ marginTop: 20, marginBottom: 10 }}>
+            <TransactionSwitch />
+          </View>
+          <View>
+            <Text style={{ ...styles.text_tertiary, fontSize: 22 }}>
+              Recent transactions
+            </Text>
+            <TransactionList />
+          </View>
+        </View>
       </View>
     </Animated.View>
   );
 }
+
+
 
 const styles = StyleSheet.create({
   expenseContainer: {

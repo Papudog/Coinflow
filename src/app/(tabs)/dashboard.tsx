@@ -42,14 +42,9 @@ export default function Dashboard(): React.JSX.Element {
             Coinflow
           </Text>
         </Animated.View>
-
         <View>
           <CategoriesList />
           <TransactionSection />
-          <View style={{ marginVertical: 20 }}>
-            <TransactionSwitch />
-          </View>
-          <TransactionList />
         </View>
       </View>
     </ScrollView>

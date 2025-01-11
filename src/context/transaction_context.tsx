@@ -3,20 +3,16 @@ import { Transaction, TransactionType } from "../models/transactions";
 
 interface TransactionContextProps {
   transactions: Transaction[];
-  transaction: Transaction | null;
   typeSwitch: TransactionType;
-  setTransactions: (transactions: Transaction[]) => void;
-  setTransaction: (transaction: Transaction | null) => void;
   setTypeSwitch: (typeSwitch: TransactionType) => void;
+  setLastTransaction: (transaction: Transaction) => void;
 }
 
 export const TransactionContext = createContext<TransactionContextProps>({
   transactions: [],
-  transaction: null,
   typeSwitch: "Expense",
-  setTransactions: () => { },
-  setTransaction: () => { },
-  setTypeSwitch: () => { }
+  setTypeSwitch: () => { },
+  setLastTransaction: () => { }
 });
 
 

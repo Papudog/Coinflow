@@ -1,33 +1,17 @@
-import { TRANSACTION_GET_FAILED } from "@/src/constants/supabase";
 import { theme } from "@/src/constants/theme";
 import { useTransaction } from "@/src/context/transaction_context";
-import { Transaction, TransactionType } from "@/src/models/transactions";
-import { fetchTransactionsByType } from "@/src/services/transaction-service";
 import { useEffect, useState } from "react";
 import { StyleSheet, Text, ToastAndroid, TouchableOpacity, View } from "react-native";
 
 
 export default function TransactionSwitch(): React.JSX.Element {
   const [isActive, setIsActive] = useState<boolean>(true);
-  const { setTransactions, transaction, setTypeSwitch, typeSwitch } = useTransaction()
-
+  const { setTypeSwitch, typeSwitch } = useTransaction()
 
   useEffect((): void => {
     setTypeSwitch(isActive ? "Expense" : "Income");
   }, [isActive]);
 
-  useEffect((): void => {
-    getTransactionsById();
-  }, [typeSwitch, transaction]);
-
-  const getTransactionsById = async (): Promise<void> => {
-    try {
-      const data: Transaction[] = await fetchTransactionsByType(typeSwitch);
-      setTransactions(data);
-    } catch (error) {
-      ToastAndroid.show(TRANSACTION_GET_FAILED, ToastAndroid.SHORT);
-    }
-  }
 
   return (
     <View style={styles.switchContainer}>

@@ -31,8 +31,8 @@ export default function TransactionList(): React.JSX.Element {
 
   const renderTransactions: ListRenderItem<Transaction> = ({ item, index }) => {
     return (
-      <Animated.View entering={FadeInLeft.delay((index + 1) * 400)
-        .duration(400)
+      <Animated.View entering={FadeInLeft.delay((index + 1) * 200)
+        .duration(200)
         .springify()}
         style={{ marginVertical: 5 }}
       >

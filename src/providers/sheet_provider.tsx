@@ -1,9 +1,7 @@
 import BottomSheet from "@gorhom/bottom-sheet";
 import {
-  createContext,
   PropsWithChildren,
   ReactNode,
-  useContext,
   useRef,
   useState,
 } from "react";
@@ -14,7 +12,6 @@ export default function SheetProvider({
   children,
 }: PropsWithChildren): React.JSX.Element {
   const sheetRef = useRef<BottomSheet>(null);
-
   const [node, setNode] = useState<ReactNode | null>(null);
 
   const openBottomSheet = (node: ReactNode): void => {

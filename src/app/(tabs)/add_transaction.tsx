@@ -26,7 +26,7 @@ export default function AddTransaction(): React.JSX.Element {
 
   // Context
   const { setCategory, category } = useCategory();
-  const { setTransaction, typeSwitch, setTypeSwitch } = useTransaction();
+  const { typeSwitch, setLastTransaction } = useTransaction();
   const { uuid } = useUser();
 
   // OnInit
@@ -41,7 +41,7 @@ export default function AddTransaction(): React.JSX.Element {
       const category_id: number = category.id!;
       const numericAmount: number = Number(amount);
 
-      const data: Transaction = await addTransaction({
+      const transaction: Transaction = await addTransaction({
         type: typeSwitch,
         amount: numericAmount,
         note,
@@ -49,7 +49,7 @@ export default function AddTransaction(): React.JSX.Element {
         profile_id: uuid
       });
 
-      setTransaction(data);
+      setLastTransaction(transaction);
       statesHandler();
       ToastAndroid.show(TRANSACTION_SUCCESS, ToastAndroid.SHORT);
     } catch (error) {

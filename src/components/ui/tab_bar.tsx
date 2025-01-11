@@ -8,11 +8,7 @@ interface IconProps {
   color: string;
 }
 
-export default function TabBar({
-  state,
-  descriptors,
-  navigation,
-}: BottomTabBarProps) {
+export default function TabBar({ state, descriptors, navigation }: BottomTabBarProps) {
   const icons: { [key: string]: (props: IconProps) => React.JSX.Element } = {
     dashboard: (props) => <FontAwesome name="dashboard" size={24} {...props} />,
     add_transaction: (props) => <FontAwesome name="plus" size={24} {...props} />,

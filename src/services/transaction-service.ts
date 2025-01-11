@@ -1,6 +1,6 @@
 import { supabase } from "@/lib/supabase";
 import { Transaction } from "../models/transactions";
-import { TRANSACTION_GET_FAILED, TRANSACTIONS } from "../constants/supabase";
+import { TRANSACTION_GET_FAILED, TRANSACTION_POST_FAILED, TRANSACTIONS } from "../constants/supabase";
 
 export async function addTransaction(transaction: Transaction): Promise<Transaction> {
   const { amount, type, note, category_id, profile_id } = transaction
@@ -11,7 +11,7 @@ export async function addTransaction(transaction: Transaction): Promise<Transact
     .select("*, categories(*)")
     .single();
 
-  if (error) throw new Error("Failed to save transaction.");
+  if (error) throw new Error(TRANSACTION_POST_FAILED);
 
   return data as Transaction;
 }
@@ -19,21 +19,10 @@ export async function addTransaction(transaction: Transaction): Promise<Transact
 export async function fetchTransactions(): Promise<Transaction[]> {
   const { data, error } = await supabase
     .from(TRANSACTIONS)
-    .select("*, categories(*)");
-
-  if (error) throw new Error(TRANSACTION_GET_FAILED)
-
-  return data as Transaction[];
-}
-
-export async function fetchTransactionsByType(type: string): Promise<Transaction[]> {
-  const { data, error } = await supabase
-    .from(TRANSACTIONS)
     .select("*, categories(*)")
-    .eq("type", type);
+    .order("created_at", { ascending: false });
 
   if (error) throw new Error(TRANSACTION_GET_FAILED)
 
-  return data as Transaction[];
+  return data ?? [];
 }
-

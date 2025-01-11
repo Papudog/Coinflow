@@ -1,4 +1,4 @@
-import { router, Router, useRouter } from "expo-router";
+import { router } from "expo-router";
 import { useEffect, useState } from "react";
 import { Alert, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { FontAwesome } from "@expo/vector-icons";
@@ -12,10 +12,13 @@ import ButtonSubmit from "@/src/components/login/button_submit";
 import { supabase } from "@/lib/supabase";
 
 export default function Login(): React.JSX.Element {
+  // States
+  const [isFormValid, setIsFormValid] = useState<boolean>(false);
+
+  // Context
   const [email, setEmail, isEmailValid] = useEmail();
   const [password, setPassword, isPasswordValid] = usePassword();
 
-  const [isFormValid, setIsFormValid] = useState<boolean>(false);
 
   useEffect((): void => {
     setIsFormValid(isEmailValid && isPasswordValid);
@@ -44,70 +47,45 @@ export default function Login(): React.JSX.Element {
           secureTextEntry={true}
         />
 
-        <Animated.View
-          entering={FadeInDown.delay(400).duration(1000).springify()}
-          style={styles.loginOptions}
-        >
+        <Animated.View entering={FadeInDown.delay(400).duration(1000).springify()}
+          style={styles.loginOptions}>
           <TouchableOpacity>
             <Text style={styles.text_tertiary}>Forgot password?</Text>
           </TouchableOpacity>
         </Animated.View>
 
-        <Animated.View
-          entering={FadeInDown.delay(600).duration(1000).springify()}
-          style={{ width: "100%" }}
-        >
-          <ButtonSubmit
-            onPress={(): void => onSubmit()}
-            disabled={!isFormValid}
-          >
+        <Animated.View entering={FadeInDown.delay(600).duration(1000).springify()}
+          style={{ width: "100%" }}>
+          <ButtonSubmit disabled={!isFormValid}
+            onPress={(): void => onSubmit()}>
             <Text style={styles.text_light}>Log in</Text>
             <FontAwesome name="arrow-right" size={16} color={theme.light} />
           </ButtonSubmit>
         </Animated.View>
 
-        <Animated.View
-          entering={FadeInLeft.delay(800).duration(1000).springify()}
-          style={styles.divider}
-        >
+        <Animated.View entering={FadeInLeft.delay(800).duration(1000).springify()}
+          style={styles.divider}>
           <View style={styles.lines} />
           <View>
-            <Text
-              style={{
-                ...styles.text_tertiary,
-                width: 50,
-                textAlign: "center",
-              }}
-            >
+            <Text style={{ ...styles.text_tertiary, width: 50, textAlign: "center" }}>
               Or
             </Text>
           </View>
           <View style={styles.lines} />
         </Animated.View>
 
-        <Animated.View
-          entering={FadeInLeft.delay(800).duration(1000).springify()}
-          style={styles.loginMethods}
-        >
+        <Animated.View entering={FadeInLeft.delay(800).duration(1000).springify()}
+          style={styles.loginMethods}>
           <TouchableOpacity>
             <FontAwesome name="google" size={16} color={theme.tertiary} />
           </TouchableOpacity>
         </Animated.View>
 
-        <Animated.View
-          entering={FadeInLeft.delay(1000).duration(1000).springify()}
-          style={{
-            position: "absolute",
-            bottom: 60,
-            flexDirection: "row",
-            alignItems: "center",
-          }}
-        >
+        <Animated.View entering={FadeInLeft.delay(1000).duration(1000).springify()}
+          style={{ position: "absolute", bottom: 60, flexDirection: "row", alignItems: "center" }}>
           <Text style={styles.text_light}>Don't have an account? </Text>
-          <TouchableOpacity
-            style={{ alignItems: "center" }}
-            onPress={() => router.push({ pathname: "/signup" })}
-          >
+          <TouchableOpacity style={{ alignItems: "center" }}
+            onPress={() => router.push({ pathname: "/signup" })}>
             <Text style={styles.text_tertiary}>Sign up</Text>
           </TouchableOpacity>
         </Animated.View>
@@ -117,10 +95,7 @@ export default function Login(): React.JSX.Element {
 }
 
 async function signInWithEmail(email: string, password: string): Promise<void> {
-  const { error } = await supabase.auth.signInWithPassword({
-    email,
-    password,
-  });
+  const { error } = await supabase.auth.signInWithPassword({ email, password });
 
   if (error) Alert.alert(error.message);
   else router.push({ pathname: "/(tabs)/dashboard" });

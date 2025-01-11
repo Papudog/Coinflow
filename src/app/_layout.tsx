@@ -10,52 +10,30 @@ import AppProviders from "../providers/app_providers";
 SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout(): React.JSX.Element | null {
-  const [fontsLoaded] = useFonts({
+  const [loaded, error] = useFonts({
     "Outfit-Regular": require("../assets/fonts/Outfit-Regular.ttf"),
     "Outfit-Bold": require("../assets/fonts/Outfit-Bold.ttf"),
   });
 
-  const [isSessionChecked, setIsSessionChecked] = useState<boolean>(false);
-
-  const onInit = useCallback(async () => {
-    try {
-      if (!fontsLoaded) return;
-
-      const {
-        data: { session },
-      } = await supabase.auth.getSession();
-
-      session ? router.replace("/(tabs)/dashboard") : router.replace("/");
-    } catch (err) {
-      console.error(err);
-    } finally {
-      setIsSessionChecked(true);
-      await SplashScreen.hideAsync();
-    }
-  }, [fontsLoaded]);
-
   useEffect((): void => {
-    onInit();
-  }, [onInit]);
+    if (loaded || error) {
+      SplashScreen.hideAsync();
 
-  if (!fontsLoaded || !isSessionChecked) {
-    return (
-      <GestureHandlerRootView>
-        <AppProviders>
-          <Slot />
-        </AppProviders>
-      </GestureHandlerRootView>
-    );
-  }
+      const getUserSession = async () => {
+        const { data: { session } } = await supabase.auth.getSession();
+        session ? router.replace("/(tabs)/dashboard") : router.replace("/");
+      }
+
+      getUserSession();
+    }
+  }, [loaded, error]);
+
+  if (!loaded && !error) return null;
 
   return (
     <GestureHandlerRootView>
       <AppProviders>
-        <Stack
-          screenOptions={{
-            headerShown: false,
-          }}
-        >
+        <Stack screenOptions={{ headerShown: false }}>
           <Stack.Screen name="index" options={{ title: "Login" }} />
           <Stack.Screen name="signup" options={{ title: "Sign Up" }} />
           <Stack.Screen name="(tabs)" />
